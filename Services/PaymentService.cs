@@ -9,7 +9,7 @@ namespace Restaurant_Site.Services
 {
     public class PaymentService : IPaymentService
     {
-        private ISQLRepository<Payment> _repository;
+         ISQLRepository<Payment> _repository;
 
         public PaymentService(ISQLRepository<Payment> repository)
         {

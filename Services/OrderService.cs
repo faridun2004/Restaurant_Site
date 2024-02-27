@@ -9,7 +9,7 @@ namespace Restaurant_Site.Services
 {
     public class OrderService : IOrderService
     {
-        private ISQLRepository<Order> _repository;
+         ISQLRepository<Order> _repository;
 
         public OrderService(ISQLRepository<Order> repository)
         {

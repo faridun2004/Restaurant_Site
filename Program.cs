@@ -44,7 +44,7 @@ namespace Restaurant_Site
                 var context = scope.ServiceProvider.GetService<RestaurantContext>();
                 context.Database.Migrate();
             }
-                // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

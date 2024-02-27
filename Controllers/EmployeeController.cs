@@ -5,6 +5,8 @@ using System.Net;
 
 namespace Restaurant_Site.Controllers
 {
+    [ApiController]
+    [Route("Employee")]
     public class EmployeeController : ControllerBase
     {
         readonly IEmployeeService _service;

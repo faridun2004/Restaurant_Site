@@ -9,7 +9,7 @@ namespace Restaurant_Site.Services
 {
     public class MenuService : IMenuService
     {
-        private ISQLRepository<Menu> _repository;
+         ISQLRepository<Menu> _repository;
 
         public MenuService(ISQLRepository<Menu> repository)
         {

@@ -12,8 +12,8 @@ namespace Restaurant_Site.Controllers
     [Route("api/[controller]")]
     public class DishController : ControllerBase
     {
-        private readonly IDishService _dishService;
-        private readonly ILogger<DishController> _logger;
+         readonly IDishService _dishService;
+         readonly ILogger<DishController> _logger;
 
         public DishController(IDishService dishService, ILogger<DishController> logger)
         {
