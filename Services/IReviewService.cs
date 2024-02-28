@@ -2,12 +2,7 @@
 
 namespace Restaurant_Site.Services
 {
-    public interface IReviewService
+    public interface IReviewService: IBaseService<Review>
     {
-        IQueryable<Review> GetAll();
-        Review GetById(Guid id);
-        string Create(Review worker);
-        string Update(Guid id, Review item);
-        string Delete(Guid id);
     }
 }

@@ -2,12 +2,7 @@
 
 namespace Restaurant_Site.Services
 {
-    public interface IEmployeeService
+    public interface IEmployeeService: IBaseService<Employee>
     {
-        IQueryable<Employee> GetAll();
-        Employee GetById(Guid id);
-        string Create(Employee employee);
-        string Update(Guid id, Employee item);
-        string Delete(Guid id);
     }
 }

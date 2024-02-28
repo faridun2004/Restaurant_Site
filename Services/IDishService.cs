@@ -2,12 +2,7 @@
 
 namespace Restaurant_Site.Services
 {
-    public interface IDishService
+    public interface IDishService: IBaseService<Dish>
     {
-        IQueryable<Dish> GetAll();
-        Dish GetById(Guid id);
-        string Create(Dish item);
-        string Update(Guid id, Dish item);
-        string Delete(Guid id);
     }
 }

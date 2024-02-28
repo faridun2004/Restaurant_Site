@@ -1,6 +1,6 @@
 ﻿namespace Restaurant_Site.Models
 {
-    public class Person: BaseEntity
+    public abstract class Person: BaseEntity
     {
         public string? FirstName { get; set; }
 

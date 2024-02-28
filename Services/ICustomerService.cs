@@ -2,12 +2,7 @@
 
 namespace Restaurant_Site.Services
 {
-    public interface ICustomerService
+    public interface ICustomerService: IBaseService<Customer>
     {
-        IQueryable<Customer> GetAll();
-        Customer GetById(Guid id);
-        string Create(Customer customer);
-        string Update(Guid id, Customer item);
-        string Delete(Guid id);
     }
 }
