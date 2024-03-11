@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Restaurant_Site.Infrastructure;
+using Restaurant_Site.IServices;
+using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
 using Restaurant_Site.Services;
 using System.Text.Json.Serialization;
@@ -19,7 +22,7 @@ namespace Restaurant_Site
           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             builder.Services.AddLogging(l =>
             {
-                l.AddConsole();//TODO
+               // l.AddConsole();//TODO
             });
 
             builder.Services.AddControllers()
@@ -36,7 +39,6 @@ namespace Restaurant_Site
             builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddScoped<ITableService, TableService>();
             builder.Services.AddScoped(typeof(ISQLRepository<>), typeof(SQLRepository<>));
-
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

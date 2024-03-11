@@ -9,5 +9,6 @@ namespace Restaurant_Site.Repository
         bool Create(T item);
         bool Update(T item);
         bool Delete(Guid id);
+        
     }
 }

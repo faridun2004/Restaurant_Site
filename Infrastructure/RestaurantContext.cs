@@ -13,6 +13,7 @@ namespace Restaurant_Site.Infrastructure
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
@@ -23,10 +24,8 @@ namespace Restaurant_Site.Infrastructure
 
             // Dish
             modelBuilder.Entity<Dish>()
-        .Property(d => d.Price)
-        .HasColumnType("decimal(18,2)");
-
-            
+            .Property(d => d.Price)
+            .HasColumnType("decimal(18,2)");
 
             // Menu
             modelBuilder.Entity<Menu>(entity =>
@@ -49,7 +48,12 @@ namespace Restaurant_Site.Infrastructure
                 entity.HasKey(c => c.Id);
             });
 
-           
+            // Employee
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.ToTable("Employees");
+                entity.HasKey(e => e.Id);
+            });
 
             // Table
             modelBuilder.Entity<Table>(entity =>

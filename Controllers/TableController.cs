@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
-using Restaurant_Site.Services;
 using System.Net;
 using Table = Restaurant_Site.Models.Table;
 
