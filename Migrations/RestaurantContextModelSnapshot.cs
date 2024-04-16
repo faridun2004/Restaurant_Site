@@ -17,33 +17,10 @@ namespace Restaurant_Site.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-preview.1.24081.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Restaurant_Site.Models.Customer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ContactInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers", (string)null);
-                });
 
             modelBuilder.Entity("Restaurant_Site.Models.Dish", b =>
                 {
@@ -147,6 +124,56 @@ namespace Restaurant_Site.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("Restaurant_Site.Models.Person", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Persons");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("Restaurant_Site.Models.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -154,9 +181,10 @@ namespace Restaurant_Site.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Rating")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -176,6 +204,35 @@ namespace Restaurant_Site.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tables", (string)null);
+                });
+
+            modelBuilder.Entity("Restaurant_Site.Models.Customer", b =>
+                {
+                    b.HasBaseType("Restaurant_Site.Models.Person");
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
+            modelBuilder.Entity("Restaurant_Site.Models.Employee", b =>
+                {
+                    b.HasBaseType("Restaurant_Site.Models.Person");
+
+                    b.Property<int>("Responsibility")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Employee");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2089cb5e-c4a2-4b2f-b540-f1b754753b91"),
+                            FirstName = "Faridun",
+                            LastName = "Ikromzoda",
+                            Password = "12",
+                            Role = "Admin",
+                            Username = "Faridun",
+                            Responsibility = 0
+                        });
                 });
 
             modelBuilder.Entity("Restaurant_Site.Models.Dish", b =>

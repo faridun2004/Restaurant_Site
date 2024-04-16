@@ -2,12 +2,14 @@
 {
     public class Employee: Person
     {
-        public Role Role { get; set; }
+        public Role Responsibility { get; set; }
     }
     public enum Role
     {
         Waiter,
         Chef,
-        Manager
+        Manager,
+        Deliveryman
+
     }
 }

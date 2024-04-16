@@ -48,6 +48,9 @@ namespace Restaurant_Site.Services
                 _item.FirstName = item.FirstName;
                 _item.LastName = item.LastName;
                 _item.ContactInfo=item.ContactInfo;
+                _item.Username = item.Username;
+                _item.Password = item.Password;
+                _item.Role = item.Role;
                 var result = _repository.Update(_item);
                 if (result)
                     return "Item updated";

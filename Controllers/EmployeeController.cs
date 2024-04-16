@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
 using Restaurant_Site.Services;
@@ -8,6 +9,7 @@ namespace Restaurant_Site.Controllers
 {
     [ApiController]
     [Route("Employee")]
+    
     public class EmployeeController : BaseController<Employee>
     {
         protected readonly IEmployeeService _employeeService;

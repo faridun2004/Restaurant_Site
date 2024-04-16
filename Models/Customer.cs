@@ -3,6 +3,11 @@
     public class Customer: Person
     {
     }
+    public enum CustomerStatus
+    {
+        Active,
+        Inactive,
+    }
 }
 
 

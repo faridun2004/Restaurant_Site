@@ -9,6 +9,7 @@ namespace Restaurant_Site.Infrastructure
     {
         public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options)
         { }
+        public DbSet<Person> Persons { get; set; }
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -22,6 +23,11 @@ namespace Restaurant_Site.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Person>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.HasIndex(p => p.Username).IsUnique();
+            });
             // Dish
             modelBuilder.Entity<Dish>()
             .Property(d => d.Price)
@@ -42,21 +48,27 @@ namespace Restaurant_Site.Infrastructure
             });
 
             // Customer
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.ToTable("Customers");
-                entity.HasKey(c => c.Id);
-            });
+            modelBuilder.Entity<Customer>()
+         .Property(c => c.RefreshToken)
+         .IsRequired(false);
 
             // Employee
             modelBuilder.Entity<Employee>(entity =>
+        {
+            entity.HasData(new Employee()
             {
-                entity.ToTable("Employees");
-                entity.HasKey(e => e.Id);
+                FirstName = "Faridun",
+                LastName = "Ikromzoda",
+                Role="admin",
+                Username = "Faridun",
+                Password = "12"
+
             });
 
-            // Table
-            modelBuilder.Entity<Table>(entity =>
+        });
+
+                // Table
+                modelBuilder.Entity<Table>(entity =>
             {
                 entity.ToTable("Tables");
                 entity.HasKey(t => t.Id);

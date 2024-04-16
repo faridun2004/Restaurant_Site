@@ -1,22 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
 using System.Net;
 
 namespace Restaurant_Site.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public abstract class BaseController<TEntity> : ControllerBase where TEntity : BaseEntity
     {
         protected readonly IBaseService<TEntity> _baseService;
         protected readonly ILogger<BaseController<TEntity>> _logger;
-
         public BaseController(ILogger<BaseController<TEntity>> logger, IBaseService<TEntity> baseService)
         {
             _logger = logger;
             _baseService = baseService;
         }
-
+        
         [HttpGet("Allitems")]
+        [AllowAnonymous]
         public virtual IEnumerable<TEntity> Get()
         {
             _logger.LogDebug("API started...");
@@ -33,8 +35,8 @@ namespace Restaurant_Site.Controllers
 
             return _baseService.GetAll();
         }
-
         [HttpGet("GetElementById")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(BaseEntity), (int)HttpStatusCode.OK)]
         public virtual TEntity Get(Guid id)
         {
