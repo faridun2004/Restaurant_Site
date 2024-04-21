@@ -23,8 +23,7 @@ namespace Restaurant_Site.Controllers
             _orderService = orderService;
             _employeeService = employeeService;
         }
-        [HttpPost]
-        
+        [HttpPost("Place order")]
         public async Task<IActionResult> PlaceOrder(Order order)
         {
             if (ModelState.IsValid)

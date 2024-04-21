@@ -1,15 +1,9 @@
-﻿namespace Restaurant_Site.Models
+﻿using Restaurant_Site.Models.Enums;
+
+namespace Restaurant_Site.Models
 {
     public class Employee: Person
     {
-        public Role Responsibility { get; set; }
-    }
-    public enum Role
-    {
-        Waiter,
-        Chef,
-        Manager,
-        Deliveryman
-
+        public EmployeeRole Responsibility { get; set; }
     }
 }

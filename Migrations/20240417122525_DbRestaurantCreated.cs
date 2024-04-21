@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Restaurant_Site.Migrations
 {
     /// <inheritdoc />
-    public partial class RestaurantDataBase : Migration
+    public partial class DbRestaurantCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -146,9 +148,24 @@ namespace Restaurant_Site.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Dishes",
+                columns: new[] { "Id", "Description", "MenuId", "Name", "OrderId", "Photo", "Price" },
+                values: new object[] { new Guid("fa70f727-16d4-48e7-93b2-0b8f163a21e2"), "gushtin", null, "mantu", null, "a.jpg", 20m });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "CustomerId", "Status", "TableId" },
+                values: new object[] { new Guid("3f2ae6d0-81ac-422b-840f-042b7faa76d4"), null, 0, null });
+
+            migrationBuilder.InsertData(
                 table: "Persons",
                 columns: new[] { "Id", "Address", "ContactInfo", "Discriminator", "FirstName", "LastName", "Password", "RefreshToken", "Responsibility", "Role", "Username" },
-                values: new object[] { new Guid("2089cb5e-c4a2-4b2f-b540-f1b754753b91"), null, null, "Employee", "Faridun", "Ikromzoda", "12", null, 0, "Admin", "Faridun" });
+                values: new object[,]
+                {
+                    { new Guid("67dd4571-749d-49aa-b0ce-9ac2dd43dfe0"), null, null, "Employee", "Azamjon", "Soliev", "123", null, 0, "admin", "Azam" },
+                    { new Guid("8115dc24-7743-422b-bc61-2021d0ee29b4"), null, null, "Employee", "Faridun", "Ikromzoda", "12", null, 0, "admin", "Faridun" },
+                    { new Guid("b5941d53-561e-4720-9e70-770c355e19ad"), null, null, "Employee", "nasim", "nasa", "123", null, 0, "admin", "Nasa" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dishes_MenuId",

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Restaurant_Site.Auth;
@@ -32,7 +33,6 @@ namespace Restaurant_Site.Services
 
                 return await GeneratedJWT(user);
             }
-
             async Task<TokenInfo> GeneratedJWT(Person user)
             {
                 if (user is null)
@@ -47,7 +47,7 @@ namespace Restaurant_Site.Services
                 new Claim(ClaimTypes.Role, user.Role)
             };
             foreach (var userRole in userRoles)
-                new Claim(ClaimTypes.Role, userRole);
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
 
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
@@ -59,7 +59,6 @@ namespace Restaurant_Site.Services
 
                 var accessToken = new JwtSecurityTokenHandler().WriteToken(jwt);
                 var refreshToken = Guid.NewGuid().ToString();
-
                 user.RefreshToken = refreshToken;
             _context.Update(user);
             await _context.SaveChangesAsync();

@@ -9,7 +9,6 @@ namespace Restaurant_Site.Controllers
     [Route("[controller]")]
     public class MenuController : BaseController<Menu> 
     {
-
         public MenuController(ILogger<MenuController> logger, IMenuService menuService) : base(logger, menuService)
         { }
     }

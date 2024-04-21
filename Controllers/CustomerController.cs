@@ -8,7 +8,6 @@ namespace Restaurant_Site.Controllers
 {
     [ApiController]
     [Route("Customer")]
-    
     public class CustomerController : BaseController<Customer>
     {
         public CustomerController(ILogger<CustomerController> logger, ICustomerService service) :

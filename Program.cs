@@ -9,15 +9,16 @@ using Restaurant_Site.Middlewares;
 using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
 using Restaurant_Site.Services;
+using Restaurant_Site.Validations;
 using System.Text.Json.Serialization;
-
+using FluentValidation;
 namespace Restaurant_Site
 {
     public class Program
     {
         public const string AppKey = "TestKey";
         public static void Main(string[] args)
-        {
+        {  
             var builder = WebApplication.CreateBuilder(args);
 
             //Adding custom Auth
@@ -28,20 +29,20 @@ namespace Restaurant_Site
           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             builder.Services.AddLogging();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowLocalhost",
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:3000") // Разрешение запроса от фронтенд домен
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
-                    });
-            });
-
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowLocalhost",
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://localhost:3000") // Разрешение запроса от фронтенд домен
+            //                   .AllowAnyHeader()
+            //                   .AllowAnyMethod();
+            //        });
+            //});
             builder.Services.AddControllers()
            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddValidatorsFromAssemblyContaining<DishDtoValidation>();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restaurant application APIs", Version = "v1" });
@@ -84,15 +85,11 @@ namespace Restaurant_Site
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<ApplicationKeyMiddleware>();
             app.UseMiddleware<EndpointListenerMiddleware>();
-            app.UseCors("AllowLocalhost"); // Применяем CORS middleware
-
+            //app.UseCors("AllowLocalhost"); // Применяем CORS middleware
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

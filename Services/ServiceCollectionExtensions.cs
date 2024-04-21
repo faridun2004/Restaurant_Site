@@ -17,7 +17,11 @@ namespace Restaurant_Site.Services
             service.AddScoped<IMenuService, MenuService>();
             service.AddScoped<IInventoryService, InventoryService>();
             service.AddScoped<ITableService, TableService>();
+            service.AddScoped<IDeliveryService, DeliveryService>();
+            service.AddScoped<IEventService, EventService>();
+            service.AddScoped<IShoppingCartService, ShoppingCartService>();
             service.AddScoped(typeof(ISQLRepository<>), typeof(SQLRepository<>));
         }
+
     }
 }

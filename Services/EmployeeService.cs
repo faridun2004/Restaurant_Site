@@ -1,5 +1,6 @@
 ﻿using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
+using Restaurant_Site.Models.Enums;
 using Restaurant_Site.Repository;
 
 
@@ -15,7 +16,7 @@ namespace Restaurant_Site.Services
         {
             _repository = repository;
             _cookSemaphore = new SemaphoreSlim(maxChefs);
-            _chefs = repository.GetAll().Where(e => e.Responsibility == Role.Chef).ToList();
+            _chefs = repository.GetAll().Where(e => e.Responsibility == EmployeeRole.Chef).ToList();
         }
         public IQueryable<Employee> GetAll()
         {
@@ -82,7 +83,7 @@ namespace Restaurant_Site.Services
                 var chef = GetAvailableChef();
                 if (chef != null)
                 {
-                    if (chef.Responsibility == Role.Chef) // Проверяем, является ли сотрудник поваром
+                    if (chef.Responsibility == EmployeeRole.Chef) // Проверяем, является ли сотрудник поваром
                     {
                         await CookOrderAsync(chef, order);
                         _cookSemaphore.Release(); // Освободить слот повара после приготовления заказа

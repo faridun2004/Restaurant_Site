@@ -7,11 +7,5 @@
         public Table? Table { get; set; }
         public OrderStatus? Status { get; set; }
     }
-    public enum OrderStatus
-    {
-        New,
-        InProgress,
-        Completed,
-        Cancelled
-    }
+
 }

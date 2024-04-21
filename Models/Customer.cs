@@ -1,12 +1,11 @@
-﻿namespace Restaurant_Site.Models
+﻿using System.Globalization;
+
+namespace Restaurant_Site.Models
 {
     public class Customer: Person
     {
-    }
-    public enum CustomerStatus
-    {
-        Active,
-        Inactive,
+        public CustomerStatus customerStatus {  get; set; }
+        public CultureTypes customerType { get; set; }
     }
 }
 

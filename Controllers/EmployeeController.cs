@@ -14,9 +14,7 @@ namespace Restaurant_Site.Controllers
     {
         protected readonly IEmployeeService _employeeService;
         public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService service): base(logger, service) 
-        {
-            _employeeService = service;
-        }
+        {}
         [HttpPost("PlaceOrder")]
         public virtual IActionResult PlaceOrder(Order order)
         {

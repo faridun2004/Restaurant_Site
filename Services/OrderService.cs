@@ -1,8 +1,6 @@
 ﻿using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
-
-//using Restaurant_Site.Repositories; // Подразумевается, что у вас есть репозиторий для работы с заказами
 using System;
 using System.Linq;
 
@@ -16,24 +14,20 @@ namespace Restaurant_Site.Services
         {
             _repository = repository;
         }
-
         public IQueryable<Order> GetAll()
         {
             return _repository.GetAll();
         }
-
         public Order GetById(Guid id)
         {
             return _repository.GetById(id);
         }
-
         public string Create(Order item)
         {
             // Ваша логика валидации и обработки создания заказа
             _repository.Create(item);
             return $"Created new item with this ID: {item.Id}";
         }
-
         public string Update(Guid id, Order item)
         {
             // Ваша логика обновления заказа
@@ -45,7 +39,6 @@ namespace Restaurant_Site.Services
                 existingOrder.Customer = item.Customer;
                 existingOrder.Table = item.Table;
                 existingOrder.Status = item.Status;
-
                 // Сохраняем обновленные данные в репозитории
                 _repository.Update(existingOrder);
                 return "Order updated successfully.";
@@ -55,7 +48,6 @@ namespace Restaurant_Site.Services
                 return "Order not found.";
             }
         }
-
         public string Delete(Guid id)
         {
             // Ваша логика удаления заказа
