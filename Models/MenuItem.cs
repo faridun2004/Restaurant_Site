@@ -2,6 +2,6 @@
 {
     public class Menu: BaseEntity
     {
-        public List<Dish>? Dishes { get; set; }
+        public List<Product>? Products { get; set; }
     }
 }

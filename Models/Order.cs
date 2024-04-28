@@ -1,11 +1,15 @@
-﻿namespace Restaurant_Site.Models
+﻿
+namespace Restaurant_Site.Models
 {
     public class Order: BaseEntity
     {
-        public List<Dish>? Dishes { get; set; }
-        public Customer? Customer { get; set; }
-        public Table? Table { get; set; }
-        public OrderStatus? Status { get; set; }
+        public List<Product>? products { get; set; }
+        public Customer? customer { get; set; }
+        
+        public Table? table { get; set; }
+        public OrderStatus? status { get; set; }
+        public DateTime CretionalDate { get; internal set; }
+        public object EditDate { get; internal set; }
     }
 
 }

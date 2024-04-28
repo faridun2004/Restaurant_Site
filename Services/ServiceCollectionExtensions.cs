@@ -10,7 +10,7 @@ namespace Restaurant_Site.Services
             service.AddScoped<AuthService>();
             service.AddScoped<IEmployeeService, EmployeeService>();
             service.AddScoped<ICustomerService, CustomerService>();
-            service.AddScoped<IDishService, DishService>();
+            service.AddScoped<IProductService, ProductService>();
             service.AddScoped<IOrderService, OrderService>();
             service.AddScoped<IPaymentService, PaymentService>();
             service.AddScoped<IReviewService, ReviewService>();

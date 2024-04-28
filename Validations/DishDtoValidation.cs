@@ -8,7 +8,7 @@ namespace Restaurant_Site.Validations
     {
         public DishDtoValidation()
         {
-            RuleFor(x => x.Type).Must(t => t > DishType.Tajikan).WithMessage("Chinese food can be ordered only in the Restaurant");
+            RuleFor(x => x.Type).Must(t => t > ProductType.Tajikan).WithMessage("Chinese food can be ordered only in the Restaurant");
             RuleFor(x => x.HolderId).Must(t => t != Guid.Empty).WithMessage("HolderId must have value");
         }
     }

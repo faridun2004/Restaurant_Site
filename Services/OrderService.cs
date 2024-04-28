@@ -35,10 +35,10 @@ namespace Restaurant_Site.Services
             if (existingOrder != null)
             {
                 // Обновляем данные заказа
-                existingOrder.Dishes = item.Dishes;
-                existingOrder.Customer = item.Customer;
-                existingOrder.Table = item.Table;
-                existingOrder.Status = item.Status;
+                existingOrder.products = item.products;
+                existingOrder.customer = item.customer;
+                existingOrder.table = item.table;
+                existingOrder.status = item.status;
                 // Сохраняем обновленные данные в репозитории
                 _repository.Update(existingOrder);
                 return "Order updated successfully.";

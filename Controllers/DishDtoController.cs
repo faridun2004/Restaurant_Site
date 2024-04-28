@@ -26,7 +26,7 @@ namespace Restaurant_Site.Controllers
         [HttpGet("DishByHolderId")]
         public IEnumerable<ResponseDishDto> DishesByHolderId(RequestDishDtoByHolderId holderId)
         {
-            var dishes = _context.Dishes.Where(c => c.HolderId == holderId.HorderId);
+            var dishes = _context.Products.Where(c => c.HolderId == holderId.HorderId);
             return _mapper.Map<List<ResponseDishDto>>(dishes);
         }
         [HttpPost("Order")]
@@ -48,16 +48,16 @@ namespace Restaurant_Site.Controllers
 
             return "Dish is ordered";
         }
-        //[HttpPost("AddDish")]
-        //[Authorize(Roles = "admin")] // Предположим, что только администратор может добавлять блюда
-        //public IActionResult AddDish(DishDto dishDTO)
-        //{
-        //    var dish = _mapper.Map<Dish>(dishDTO); // Преобразование DishDTO в модель Dish
+        [HttpPost("AddDish")]
+        [Authorize(Roles = "admin")] // Предположим, что только администратор может добавлять блюда
+        public IActionResult AddDish(DishDto dishDTO)
+        {
+            var dish = _mapper.Map<Product>(dishDTO); // Преобразование DishDTO в модель Dish
 
-        //    _context.Dishes.Add(dish);
-        //    _context.SaveChanges();
+            _context.Products.Add(dish);
+            _context.SaveChanges();
 
-        //    return Ok("Блюдо успешно добавлено");
-        //}
+            return Ok("Блюдо успешно добавлено");
+        }
     }
 }

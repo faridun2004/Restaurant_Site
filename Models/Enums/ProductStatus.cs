@@ -1,6 +1,6 @@
 ﻿namespace Restaurant_Site.Models
 {
-    public enum DishStatus
+    public enum ProductStatus
     {
         Available,
         Sold_out,

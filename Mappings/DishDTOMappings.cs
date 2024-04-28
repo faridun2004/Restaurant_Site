@@ -5,11 +5,11 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Restaurant_Site.Mappings
 {
-    public class DishMappings: Profile
+    public class DishDTOMappings: Profile
     {
-        public DishMappings()
+        public DishDTOMappings()
         {
-            CreateMap<DishDto, Dish>();
+            CreateMap<DishDto, Product>();
         }
     }
 }

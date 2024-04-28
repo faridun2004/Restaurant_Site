@@ -8,8 +8,8 @@ namespace Restaurant_Site.Contracts
         public string? Name { get; set; }
         public decimal Price { get; set; }
         public string? Photo { get; set; }
-        public DishType DishType { get; set; }
-        public DishStatus DishStatus { get; set; }
+        public ProductType DishType { get; set; }
+        public ProductStatus DishStatus { get; set; }
         public Guid IssuerId { get; set; }
 
 

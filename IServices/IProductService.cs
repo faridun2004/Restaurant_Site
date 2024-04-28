@@ -2,7 +2,7 @@
 
 namespace Restaurant_Site.IServices
 {
-    public interface IDishService : IBaseService<Dish>
+    public interface IProductService : IBaseService<Product>
     {
     }
 }

@@ -77,28 +77,31 @@ namespace Restaurant_Site.Services
 
         public async Task<bool> ProcessOrderAsync(Order order)
         {
-            // Попробовать занять слот повара без ожидания
-            if (_cookSemaphore.Wait(0))
+            try
             {
-                var chef = GetAvailableChef();
-                if (chef != null)
+                // Попробовать занять слот повара без ожидания
+                if (_cookSemaphore.Wait(0))
                 {
-                    if (chef.Responsibility == EmployeeRole.Chef) // Проверяем, является ли сотрудник поваром
+                    var chef = GetAvailableChef();
+                    if (chef != null)
                     {
                         await CookOrderAsync(chef, order);
-                        _cookSemaphore.Release(); // Освободить слот повара после приготовления заказа
                         return true; // Успешно приготовлено
                     }
-                    else
-                    {
-                        // Сотрудник не является поваром
-                        // Возможно, следует вывести сообщение об ошибке
-                    }
                 }
-            }
+                else
+                {
+                    Console.WriteLine("Ошибка: Нет доступных поваров в данный момент.");
+                }
 
-            return false; // Нет доступных поваров
+                return false; // Нет доступных поваров
+            }
+            finally
+            {
+                _cookSemaphore.Release(); // Освободить слот повара после приготовления заказа
+            }
         }
+
 
         private Employee GetAvailableChef()
         {

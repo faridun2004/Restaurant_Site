@@ -6,6 +6,8 @@ using System.Net;
 using Microsoft.Extensions.Logging;
 using Restaurant_Site.IServices;
 using Restaurant_Site.Services;
+using MediatR;
+
 
 namespace Restaurant_Site.Controllers
 {
@@ -13,42 +15,64 @@ namespace Restaurant_Site.Controllers
     [Route("[controller]")]
     public class OrderController : BaseController<Order>
     {
-        private readonly ILogger<OrderController> _logger;
-        private readonly IOrderService _orderService;
-        private readonly IEmployeeService _employeeService;
+        public OrderController(ILogger<OrderController> logger, IOrderService service) :
+        base(logger, service)
+        { }
 
-        public OrderController(ILogger<OrderController> logger, IOrderService orderService, IEmployeeService employeeService): base(logger, orderService)
-        {
-            _logger = logger;
-            _orderService = orderService;
-            _employeeService = employeeService;
-        }
-        [HttpPost("Place order")]
-        public async Task<IActionResult> PlaceOrder(Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                // Проверка, был ли заказ успешно обработан поваром
-                if (await _employeeService.ProcessOrderAsync(order))
-                {
-                    // Заказ успешно обработан поваром
-                    // Далее можно добавить заказ в базу данных или выполнить другие действия
-                    // Например:
-                    _orderService.Create(order);
-                    return Ok("Order placed successfully.");
-                }
-                else
-                {
-                    // Не удалось обработать заказ поваром (нет доступных поваров)
-                    return BadRequest("No available chefs to process the order.");
-                }
-            }
-            else
-            {
-                // Некорректные данные заказа
-                return BadRequest(ModelState);
-            }
-        }
+
+
+
+
+
+
+        //: BaseController<Order>
+        //{
+        //    private readonly IMediator _mediator;
+        //    private readonly ILogger<OrderController> _logger;
+        //    private readonly IOrderService _orderService;
+        //    private readonly IEmployeeService _employeeService;
+
+        //    public OrderController(ILogger<OrderController> logger,
+        //        IOrderService orderService, IEmployeeService employeeService, IMediator mediator) : 
+        //        base(logger, orderService)
+        //    {
+        //        _mediator = mediator;
+        //        _logger = logger;
+        //        _orderService = orderService;
+        //        _employeeService = employeeService;
+        //    }
+        //    [HttpPost("CreateOrder")]
+        //    public async Task<ActionResult<bool>> CreateOrder(CreateOrderCommand command)
+        //    {
+        //        var result = await _mediator.Send(command);
+        //        return Ok(result);
+        //    }
+        //    [HttpPost("Place order")]
+        //    public async Task<IActionResult> PlaceOrder(Order order)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            // Проверка, был ли заказ успешно обработан поваром
+        //            if (await _employeeService.ProcessOrderAsync(order))
+        //            {
+        //                // Заказ успешно обработан поваром
+        //                // Далее можно добавить заказ в базу данных или выполнить другие действия
+        //                // Например:
+        //                _orderService.Create(order);
+        //                return Ok("Order placed successfully.");
+        //            }
+        //            else
+        //            {
+        //                // Не удалось обработать заказ поваром (нет доступных поваров)
+        //                return BadRequest("No available chefs to process the order.");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Некорректные данные заказа
+        //            return BadRequest(ModelState);
+        //        }
+        //    }
 
     }
 }

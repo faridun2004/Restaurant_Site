@@ -29,19 +29,21 @@ namespace Restaurant_Site
           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             builder.Services.AddLogging();
 
-            //builder.Services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowLocalhost",
-            //        builder =>
-            //        {
-            //            builder.WithOrigins("http://localhost:3000") // Разрешение запроса от фронтенд домен
-            //                   .AllowAnyHeader()
-            //                   .AllowAnyMethod();
-            //        });
-            //});
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalhost",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000") // Разрешение запроса от фронтенд домен
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
             builder.Services.AddControllers()
            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
             builder.Services.AddValidatorsFromAssemblyContaining<DishDtoValidation>();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -80,12 +82,12 @@ namespace Restaurant_Site
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(); 
             }
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<ApplicationKeyMiddleware>();
             app.UseMiddleware<EndpointListenerMiddleware>();
-            //app.UseCors("AllowLocalhost"); // Применяем CORS middleware
+            app.UseCors("AllowLocalhost"); // Применяем CORS middleware
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

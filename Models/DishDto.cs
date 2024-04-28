@@ -8,12 +8,12 @@ namespace Restaurant_Site.Models
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public string? Photo { get; set; }
-        public DishType dishType { get; set; }
+        public ProductType dishType { get; set; }
 
         public Guid HolderId { get; set; }
 
         public Guid IssuerId { get; set; }
 
-        public DishStatus dishStatus { get; set; } = DishStatus.JustOrdered;
+        public ProductStatus dishStatus { get; set; } = ProductStatus.JustOrdered;
     }
 }

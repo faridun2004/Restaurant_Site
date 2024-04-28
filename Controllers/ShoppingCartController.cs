@@ -15,6 +15,19 @@ namespace YourNamespace.Controllers
         {
             _shoppingCartService = shoppingCartService;
         }
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var allItems = _shoppingCartService.GetAll();
+                return Ok(allItems);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
 
         [HttpPost("AddToCart")]
         public IActionResult AddToCart([FromBody] ShopingCartItem item)

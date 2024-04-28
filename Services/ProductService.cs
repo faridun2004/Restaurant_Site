@@ -7,32 +7,32 @@ using System.Linq;
 
 namespace Restaurant_Site.Services
 {
-    public class DishService : IDishService
+    public class ProductService : IProductService
     {
-         ISQLRepository<Dish> _repository;
+         ISQLRepository<Product> _repository;
 
-        public DishService(ISQLRepository<Dish> repository)
+        public ProductService(ISQLRepository<Product> repository)
         {
             _repository = repository;
         }
 
-        public IQueryable<Dish> GetAll()
+        public IQueryable<Product> GetAll()
         {
             return _repository.GetAll();
         }
 
-        public Dish GetById(Guid id)
+        public Product GetById(Guid id)
         {
             return _repository.GetById(id);
         }
 
-        public string Create(Dish item)
+        public string Create(Product item)
         {
             _repository.Create(item);
             return $"Created new dish with this ID: {item.Id}";
         }
 
-        public string Update(Guid id, Dish item)
+        public string Update(Guid id, Product item)
         {
             var existingDish = _repository.GetById(id);
             if (existingDish != null)

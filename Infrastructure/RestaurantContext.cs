@@ -11,7 +11,7 @@ namespace Restaurant_Site.Infrastructure
         public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options)
         { }
         public DbSet<Person> Persons { get; set; }
-        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -34,15 +34,23 @@ namespace Restaurant_Site.Infrastructure
                 entity.HasIndex(p => p.Username).IsUnique();
             });
             // Dish
-            modelBuilder.Entity<Dish>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasData(new Dish()
+                entity.HasData(new Product()
                 {
                     Name = "mantu",
                     Description = "gushtin",
                     Price=20,
-                    Photo="a.jpg"
-
+                    Photo="a.jpg",
+                    Status=0,
+                });
+                entity.HasData(new Product()
+                {
+                    Name = "Палов",
+                    Description = "ЯК ба як",
+                    Price = 100,
+                    Photo = "palov.jpg",
+                    Status = 0,
                 });
                 entity.HasKey(p => p.Id);
             });
@@ -66,10 +74,13 @@ namespace Restaurant_Site.Infrastructure
                 entity.HasData(new Order()
                 {
                     
-                    Status=OrderStatus.New
+                    status=OrderStatus.New
+
 
                 });
             });
+            modelBuilder.Entity<Order>().Ignore(o => o.EditDate);
+
             // Customer
             modelBuilder.Entity<Customer>()
          .Property(c => c.RefreshToken)
@@ -109,8 +120,18 @@ namespace Restaurant_Site.Infrastructure
                 // Table
                 modelBuilder.Entity<Table>(entity =>
             {
-                entity.ToTable("Tables");
-                entity.HasKey(t => t.Id);
+                //entity.ToTable("Tables");
+                //entity.HasKey(t => t.Id);
+                entity.HasData(new Table()
+                {
+                    Capacity=1,
+
+                });
+                entity.HasData(new Table()
+                {
+                    Capacity = 2,
+
+                });
             });
 
             // Payment

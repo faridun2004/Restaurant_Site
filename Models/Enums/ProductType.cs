@@ -1,6 +1,6 @@
 ﻿namespace Restaurant_Site.Models
 {
-    public enum DishType
+    public enum ProductType
     {
         Italian,
         Mexican,

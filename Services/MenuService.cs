@@ -38,7 +38,7 @@ namespace Restaurant_Site.Services
             var existingMenu = _repository.GetById(id);
             if (existingMenu != null)
             {
-                existingMenu.Dishes = item.Dishes;
+                existingMenu.Products = item.Products;
                 _repository.Update(existingMenu);
                 return "Menu updated successfully.";
             }

@@ -6,7 +6,7 @@
         public string? Address { get; set; }
         public string? ContactNumber { get; set; }
         public decimal DeliveryFee { get; set; }
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public Order? Order { get; set; }
     }
 }
