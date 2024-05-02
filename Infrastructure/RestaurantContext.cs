@@ -74,7 +74,7 @@ namespace Restaurant_Site.Infrastructure
                 entity.HasData(new Order()
                 {
                     
-                    status=OrderStatus.New
+                    status=OrderStatus.Pending
 
 
                 });

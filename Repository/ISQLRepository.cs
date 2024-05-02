@@ -1,5 +1,6 @@
 ﻿using Restaurant_Site.Models;
 
+
 namespace Restaurant_Site.Repository
 {
     public interface ISQLRepository<T> where T : BaseEntity
@@ -9,6 +10,6 @@ namespace Restaurant_Site.Repository
         bool Create(T item);
         bool Update(T item);
         bool Delete(Guid id);
-        
+     
     }
 }

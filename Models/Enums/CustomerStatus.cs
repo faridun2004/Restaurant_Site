@@ -2,7 +2,8 @@
 {
     public enum CustomerStatus
     {
-        Active,
-        Inactive
+        Regular,
+        VIP,
+        Premium
     }
 }

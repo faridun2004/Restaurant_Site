@@ -28,7 +28,6 @@ namespace Restaurant_Site.Services
             _repository.Create(item);
             return $"Created new event with this ID: {item.Id}";
         }
-
         public string Update(Guid id, Event item)
         {
             var existingEvent = _repository.GetById(id);
@@ -43,7 +42,6 @@ namespace Restaurant_Site.Services
                 return "Event not found.";
             }
         }
-
         public string Delete(Guid id)
         {
             var result = _repository.Delete(id);

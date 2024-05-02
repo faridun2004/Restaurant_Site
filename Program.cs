@@ -29,16 +29,7 @@ namespace Restaurant_Site
           .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             builder.Services.AddLogging();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowLocalhost",
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:3000") // Разрешение запроса от фронтенд домен
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
-                    });
-            });
+            
             builder.Services.AddControllers()
            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +62,16 @@ namespace Restaurant_Site
 
             //Adding custom services
             builder.Services.AddMyServices();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -84,10 +85,11 @@ namespace Restaurant_Site
                 app.UseSwagger();
                 app.UseSwaggerUI(); 
             }
+            app.UseCors("AllowAll");
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<ApplicationKeyMiddleware>();
             app.UseMiddleware<EndpointListenerMiddleware>();
-            app.UseCors("AllowLocalhost"); // Применяем CORS middleware
+           
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

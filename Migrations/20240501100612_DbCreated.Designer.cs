@@ -12,8 +12,8 @@ using Restaurant_Site.Infrastructure;
 namespace Restaurant_Site.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    [Migration("20240428141915_NewDbCreated")]
-    partial class NewDbCreated
+    [Migration("20240501100612_DbCreated")]
+    partial class DbCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,7 +168,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("de2f514e-c8ce-40af-8886-a20261197433"),
+                            Id = new Guid("ad3d4f8b-4a5a-4b79-83c7-8abb1c747c08"),
                             CretionalDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             status = 0
                         });
@@ -285,13 +285,24 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8f439f2e-6f19-410a-b255-267d3d6ad156"),
+                            Id = new Guid("686e8d14-4e8a-40bf-8f81-f083656f031c"),
                             Description = "gushtin",
                             DishType = 0,
                             HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "mantu",
                             Photo = "a.jpg",
                             Price = 20m,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("ba0caf2f-3fd0-4bb1-a977-a0e4d834484d"),
+                            Description = "ЯК ба як",
+                            DishType = 0,
+                            HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Палов",
+                            Photo = "palov.jpg",
+                            Price = 100m,
                             Status = 0
                         });
                 });
@@ -339,7 +350,19 @@ namespace Restaurant_Site.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e4ac66ea-4d89-46dd-ac88-32eb9c962957"),
+                            Capacity = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("637e4064-f0af-43f2-867a-e88039fcea29"),
+                            Capacity = 2
+                        });
                 });
 
             modelBuilder.Entity("Restaurant_Site.Models.Customer", b =>
@@ -367,7 +390,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d7ac2cd9-2be3-4605-8727-92f4c49f5251"),
+                            Id = new Guid("bd0cd23f-059c-4c53-85e6-b5b6e11c9bd0"),
                             FirstName = "Faridun",
                             LastName = "Ikromzoda",
                             Password = "12",
@@ -377,7 +400,7 @@ namespace Restaurant_Site.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ce48497f-86c6-4ac8-bce5-fe63c4d6b9bc"),
+                            Id = new Guid("79ce2018-b792-4ae1-bf70-4697966c048b"),
                             FirstName = "Azamjon",
                             LastName = "Soliev",
                             Password = "123",
@@ -387,7 +410,7 @@ namespace Restaurant_Site.Migrations
                         },
                         new
                         {
-                            Id = new Guid("989b830d-1963-404a-bade-e42f1be77d02"),
+                            Id = new Guid("42a2422e-06bc-4520-b455-f2c05fd67ad9"),
                             FirstName = "nasim",
                             LastName = "nasa",
                             Password = "123",

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Restaurant_Site.Migrations
 {
     /// <inheritdoc />
-    public partial class NewDbCreated : Migration
+    public partial class DbCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,22 +224,35 @@ namespace Restaurant_Site.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CretionalDate", "customerId", "status", "tableId" },
-                values: new object[] { new Guid("de2f514e-c8ce-40af-8886-a20261197433"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0, null });
+                values: new object[] { new Guid("ad3d4f8b-4a5a-4b79-83c7-8abb1c747c08"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0, null });
 
             migrationBuilder.InsertData(
                 table: "Persons",
                 columns: new[] { "Id", "Address", "ContactInfo", "Discriminator", "FirstName", "LastName", "Password", "RefreshToken", "Responsibility", "Role", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("989b830d-1963-404a-bade-e42f1be77d02"), null, null, "Employee", "nasim", "nasa", "123", null, 0, "admin", "Nasa" },
-                    { new Guid("ce48497f-86c6-4ac8-bce5-fe63c4d6b9bc"), null, null, "Employee", "Azamjon", "Soliev", "123", null, 0, "admin", "Azam" },
-                    { new Guid("d7ac2cd9-2be3-4605-8727-92f4c49f5251"), null, null, "Employee", "Faridun", "Ikromzoda", "12", null, 0, "admin", "Faridun" }
+                    { new Guid("42a2422e-06bc-4520-b455-f2c05fd67ad9"), null, null, "Employee", "nasim", "nasa", "123", null, 0, "admin", "Nasa" },
+                    { new Guid("79ce2018-b792-4ae1-bf70-4697966c048b"), null, null, "Employee", "Azamjon", "Soliev", "123", null, 0, "admin", "Azam" },
+                    { new Guid("bd0cd23f-059c-4c53-85e6-b5b6e11c9bd0"), null, null, "Employee", "Faridun", "Ikromzoda", "12", null, 0, "admin", "Faridun" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Description", "DishType", "HolderId", "MenuId", "Name", "OrderId", "Photo", "Price", "Status" },
-                values: new object[] { new Guid("8f439f2e-6f19-410a-b255-267d3d6ad156"), "gushtin", 0, new Guid("00000000-0000-0000-0000-000000000000"), null, "mantu", null, "a.jpg", 20m, 0 });
+                values: new object[,]
+                {
+                    { new Guid("686e8d14-4e8a-40bf-8f81-f083656f031c"), "gushtin", 0, new Guid("00000000-0000-0000-0000-000000000000"), null, "mantu", null, "a.jpg", 20m, 0 },
+                    { new Guid("ba0caf2f-3fd0-4bb1-a977-a0e4d834484d"), "ЯК ба як", 0, new Guid("00000000-0000-0000-0000-000000000000"), null, "Палов", null, "palov.jpg", 100m, 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Tables",
+                columns: new[] { "Id", "Capacity" },
+                values: new object[,]
+                {
+                    { new Guid("637e4064-f0af-43f2-867a-e88039fcea29"), 2 },
+                    { new Guid("e4ac66ea-4d89-46dd-ac88-32eb9c962957"), 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Deliveries_OrderId",

@@ -11,7 +11,6 @@ namespace Restaurant_Site.Models
         public string? Photo {  get; set; }
         public ProductStatus Status { get; set; }
         public ProductType DishType { get; set; }
-
         
     }
 }
