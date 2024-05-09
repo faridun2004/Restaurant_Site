@@ -25,3 +25,4 @@ namespace Restaurant_Site.CQRS.Handlers
         }
     }
 }
+

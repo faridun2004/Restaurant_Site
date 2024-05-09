@@ -16,35 +16,32 @@ namespace Restaurant_Site.Controllers
         {
             _mediator = mediator;
         }
-
-        [HttpPost]
-        public async Task<ActionResult<Product>> CreateClient(CreateProductCommand command)
-        {
-            var user = await _mediator.Send(command);
-            return Ok(user);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetClientById(Guid id)
-        {
-            var query = new GetProductByIdQuery() { Id = id };
-            var client = await _mediator.Send(query);
-            if (client == null)
-                return NotFound();
-
-            return Ok(client);
-        }
-
         [HttpGet("AllProducts")]
         public async Task<ActionResult<List<Product>>> GetAllClients()
         {
             var query = new GetAllProductsQuery();
-            var clients = await _mediator.Send(query);
-            return Ok(clients);
+            var products = await _mediator.Send(query);
+            return Ok(products);
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetClientById(Guid id)
+        {
+            var query = new GetProductByIdQuery() { Id = id };
+            var product = await _mediator.Send(query);
+            if (product == null)
+                return NotFound();
+
+            return Ok(product);
+        }
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateClient(CreateProductCommand command)
+        {
+            var product = await _mediator.Send(command);
+            return Ok(product);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Product>> UpdateClient(Guid id, UpdateProductCommand command)
+        public async Task<ActionResult<string>> UpdateClient(Guid id, UpdateProductCommand command)
         {
             command.ProductId = id;
             var result = await _mediator.Send(command);
@@ -52,9 +49,9 @@ namespace Restaurant_Site.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser(DeleteProductCommand deleteClient)
+        public async Task<IActionResult> DeleteUser(DeleteProductCommand deleteProduct)
         {
-            var result = await _mediator.Send(deleteClient);
+            var result = await _mediator.Send(deleteProduct);
             return Ok(result);
         }
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_Site.Infrastructure;
 
@@ -11,9 +12,11 @@ using Restaurant_Site.Infrastructure;
 namespace Restaurant_Site.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    partial class RestaurantContextModelSnapshot : ModelSnapshot
+    [Migration("20240509083224_UpdateAllModels")]
+    partial class UpdateAllModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,7 +291,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("549393fc-976c-442a-a986-1c752c64b0f3"),
+                            Id = new Guid("6e875db9-e2fa-4d2d-b4c4-89e51835bbaa"),
                             Description = "gushtin",
                             DishType = 0,
                             HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -299,7 +302,7 @@ namespace Restaurant_Site.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b46182a3-711d-4ab1-afde-f8954707843f"),
+                            Id = new Guid("f0a70921-8cd5-49ef-93fe-a1023c7f833c"),
                             Description = "ЯК ба як",
                             DishType = 0,
                             HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -368,7 +371,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d4b7d780-1b02-4a02-bbbd-d0d4044e9d25"),
+                            Id = new Guid("a93c989b-88b1-4082-a7e4-e9599455ebd8"),
                             Address = "Dushanbe",
                             ContactInfo = "92-999-99-99",
                             FirstName = "Azizjon",
@@ -392,7 +395,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ca3f4a60-ac1f-4399-bce3-5e0952fc3182"),
+                            Id = new Guid("e845f5be-5bce-417a-a7c7-c73fc0d49d1d"),
                             Address = "Asht",
                             ContactInfo = "92-977-77-77",
                             FirstName = "Faridun",

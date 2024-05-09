@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;    
+using Restaurant_Site.Models;  
 using System.Net;
 
 namespace Restaurant_Site.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public abstract class BaseController<TEntity> : ControllerBase where TEntity : BaseEntity
     {
         protected readonly IBaseService<TEntity> _baseService;
@@ -60,7 +58,7 @@ namespace Restaurant_Site.Controllers
         [HttpDelete("Delete")]
         public virtual string Delete([FromQuery] Guid id)
         {
-            return _baseService.Delete(id);
+            return _baseService.Delete(id);     
         }
     }
 }

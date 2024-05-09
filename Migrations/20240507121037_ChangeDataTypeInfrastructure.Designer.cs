@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_Site.Infrastructure;
 
@@ -11,9 +12,11 @@ using Restaurant_Site.Infrastructure;
 namespace Restaurant_Site.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    partial class RestaurantContextModelSnapshot : ModelSnapshot
+    [Migration("20240507121037_ChangeDataTypeInfrastructure")]
+    partial class ChangeDataTypeInfrastructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,9 +150,6 @@ namespace Restaurant_Site.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Menus");
@@ -167,8 +167,9 @@ namespace Restaurant_Site.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EditDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("EditDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TableId")
                         .HasColumnType("uniqueidentifier");
@@ -180,7 +181,8 @@ namespace Restaurant_Site.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("TableId");
+                    b.HasIndex("TableId")
+                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
@@ -288,7 +290,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("549393fc-976c-442a-a986-1c752c64b0f3"),
+                            Id = new Guid("3b959f23-70ec-4c1b-9315-76033a505bc2"),
                             Description = "gushtin",
                             DishType = 0,
                             HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -299,7 +301,7 @@ namespace Restaurant_Site.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b46182a3-711d-4ab1-afde-f8954707843f"),
+                            Id = new Guid("fae289b9-a601-4e75-8eba-bfe14bd02912"),
                             Description = "ЯК ба як",
                             DishType = 0,
                             HolderId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -349,11 +351,19 @@ namespace Restaurant_Site.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Capacity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c35ffad2-fb84-4956-b12f-d25aa94f4521"),
+                            Capacity = "1"
+                        });
                 });
 
             modelBuilder.Entity("Restaurant_Site.Models.Customer", b =>
@@ -368,7 +378,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d4b7d780-1b02-4a02-bbbd-d0d4044e9d25"),
+                            Id = new Guid("d2a4583a-f7ba-4716-9b91-6b2cac9d3627"),
                             Address = "Dushanbe",
                             ContactInfo = "92-999-99-99",
                             FirstName = "Azizjon",
@@ -392,7 +402,7 @@ namespace Restaurant_Site.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ca3f4a60-ac1f-4399-bce3-5e0952fc3182"),
+                            Id = new Guid("bc42659c-36bd-4d65-ba19-b6175d8260e3"),
                             Address = "Asht",
                             ContactInfo = "92-977-77-77",
                             FirstName = "Faridun",
@@ -400,6 +410,18 @@ namespace Restaurant_Site.Migrations
                             Password = "12",
                             Role = "admin",
                             Username = "Faridun",
+                            Responsibility = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("678bffca-8c0f-4f61-95cd-109d6362d18b"),
+                            Address = "Khujand",
+                            ContactInfo = "92-677-77-77",
+                            FirstName = "Azamjon",
+                            LastName = "Soliev",
+                            Password = "123",
+                            Role = "admin",
+                            Username = "Azam",
                             Responsibility = 0
                         });
                 });
@@ -439,8 +461,8 @@ namespace Restaurant_Site.Migrations
                         .IsRequired();
 
                     b.HasOne("Restaurant_Site.Models.Table", "table")
-                        .WithMany("Orders")
-                        .HasForeignKey("TableId")
+                        .WithOne()
+                        .HasForeignKey("Restaurant_Site.Models.Order", "TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -461,11 +483,6 @@ namespace Restaurant_Site.Migrations
             modelBuilder.Entity("Restaurant_Site.Models.Order", b =>
                 {
                     b.Navigation("products");
-                });
-
-            modelBuilder.Entity("Restaurant_Site.Models.Table", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Restaurant_Site.Models.Customer", b =>

@@ -3,7 +3,7 @@ using Restaurant_Site.Models;
 
 namespace Restaurant_Site.CQRS.Queries
 {
-    public class GetProductByIdQuery : IRequest<Product>
+    public class GetEmployeeByIdQuery : IRequest<Employee>
     {
         public Guid Id { get; set; }
     }

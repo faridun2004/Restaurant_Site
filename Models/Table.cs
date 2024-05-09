@@ -2,6 +2,7 @@
 {
     public class Table: BaseEntity
     {
-        public int Capacity { get; set; }
+        public string? Capacity { get; set; }
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

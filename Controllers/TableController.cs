@@ -8,7 +8,7 @@ using Table = Restaurant_Site.Models.Table;
 namespace Restaurant_Site.Controllers
 {
     [ApiController]
-    [Route("Controller")]
+    [Route("Table")]
     public class TableController : BaseController<Table>
     {
         public TableController(ILogger<TableController> logger, ITableService service): 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Restaurant_Site.Auth;
@@ -18,7 +17,6 @@ namespace Restaurant_Site.Services
             {
                 _context = context;
             }
-
             public async Task<TokenInfo> Login(string username, string password)
             {
                 
@@ -26,7 +24,6 @@ namespace Restaurant_Site.Services
 
                 return await GeneratedJWT(user);
             }
-
             public async Task<TokenInfo> RefreshToken(string refreshToken)
             {
                 var user = await _context.Persons.SingleOrDefaultAsync(x => x.RefreshToken == refreshToken);

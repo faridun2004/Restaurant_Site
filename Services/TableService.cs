@@ -2,10 +2,6 @@
 using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
 
-//using Restaurant_Site.Repositories;
-using System;
-using System.Linq;
-
 namespace Restaurant_Site.Services
 {
     public class TableService : ITableService
@@ -16,23 +12,19 @@ namespace Restaurant_Site.Services
         {
             _repository = repository;
         }
-
         public IQueryable<Table> GetAll()
         {
             return _repository.GetAll();
         }
-
         public Table GetById(Guid id)
         {
             return _repository.GetById(id);
         }
-
         public string Create(Table item)
         {
             _repository.Create(item);
             return $"Created new table with this ID: {item.Id}";
         }
-
         public string Update(Guid id, Table item)
         {
             var existingTable = _repository.GetById(id);
@@ -47,7 +39,6 @@ namespace Restaurant_Site.Services
                 return "Table not found.";
             }
         }
-
         public string Delete(Guid id)
         {
             var result = _repository.Delete(id);
