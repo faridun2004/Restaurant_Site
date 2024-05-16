@@ -7,7 +7,7 @@ using Restaurant_Site.Repository;
 
 namespace Restaurant_Site.CQRS.Handlers
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Product>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, (Product,string)>
     {
         private IProductService _service;
         private readonly IMapper _mapper;
@@ -18,11 +18,11 @@ namespace Restaurant_Site.CQRS.Handlers
             _mapper = mapper;
         }
 
-        public Task<Product> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public Task<(Product, string)> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<Product>(request);
-            _service.Create(user);
-            return Task.FromResult(user);
+            var product = _mapper.Map<Product>(request);
+            var createdItem = _service.TryCreate(product, out string message);
+            return Task.FromResult((createdItem, message));
         }
     }
 }

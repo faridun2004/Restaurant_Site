@@ -1,4 +1,5 @@
-﻿using Restaurant_Site.IServices;
+﻿using Amazon.Runtime.SharedInterfaces;
+using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
 
@@ -17,48 +18,45 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
-        public Review GetById(Guid id)
+        public IQueryable<Review> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
         }
-
-        public string Create(Review item)
+        public async Task<Review> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
+        }
+      
+        public Review TryCreate(Review item, out string message)
         {
             if (string.IsNullOrEmpty(item.Comment))
             {
-                return "The name cannot be empty";
+                message= "The name cannot be empty";
+                return default;
+            }
+            return _repository.TryCreate(item, out message);
+            
+        }
+       
+        public bool TryUpdate(Guid id, Review item, out string message)
+        {
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (item is null)
+            {
+                message = "Items not found";
+                return false;
             }
             else
             {
-                _repository.Create(item);
-                return $"Created new item with this ID: {item.Id}";
+                _item.Comment=item.Comment;
+                _item.Rating=item.Rating;
+
+                return _repository.TryUpdate(_item,out message);
             }
         }
-
-        public string Update(Guid id, Review item)
+        public bool TryDelete(Guid id, out string message)
         {
-            var _item = _repository.GetById(id);
-            if (_item is not null)
-            {
-                _item.Comment = item.Comment;
-                _item.Rating = item.Rating;
-               
-                var result = _repository.Update(_item);
-                if (result)
-                    return "Item updated";
-            }
-
-            return "Item not updated";
-        }
-
-        public string Delete(Guid id)
-        {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Item deleted";
-            else
-                return "Item not found";
+            return _repository.TryDelete(id, out message);
         }
     }
 }

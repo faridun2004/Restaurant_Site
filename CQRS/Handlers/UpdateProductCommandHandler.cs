@@ -6,7 +6,7 @@ using Restaurant_Site.Models;
 
 namespace Restaurant_Site.CQRS.Handlers
 {
-    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, string>
+    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, (bool, string)>
     {
         private IProductService _service;
         private readonly IMapper _mapper;
@@ -17,12 +17,12 @@ namespace Restaurant_Site.CQRS.Handlers
             _mapper = mapper;
         }
 
-        public Task<string> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public Task<(bool,string)> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var product = _mapper.Map<Product>(request);
-            var result = _service.Update(request.ProductId, product);
+            var result = _service.TryUpdate(request.ProductId, product,out string message);
 
-            return Task.FromResult(result);
+            return Task.FromResult((result, message));
         }
     
     }

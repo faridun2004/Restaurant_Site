@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Restaurant_Site.CQRS.Commands
 {
-    public class UpdateEmployeeCommand : IRequest<string>
+    public class UpdateEmployeeCommand : IRequest<(bool,string)>
     {
         [JsonIgnore]
         public Guid EmployeeId { get; set; }
@@ -17,7 +17,7 @@ namespace Restaurant_Site.CQRS.Commands
         public string? ContactInfo { get; set; }
         public EmployeeRole Responsibility { get; set; }
         public string Role { get; set; }
-        public UpdateEmployeeCommand(Guid employeeId, string firstName, string lastName, 
+       /* public UpdateEmployeeCommand(Guid employeeId, string firstName, string lastName, 
             string address, string contact)
         {
             EmployeeId = employeeId;
@@ -25,6 +25,6 @@ namespace Restaurant_Site.CQRS.Commands
             LastName = lastName;
             Address = address;
             ContactInfo = contact;
-        }
+        }*/
     }
 }

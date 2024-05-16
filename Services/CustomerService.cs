@@ -7,6 +7,7 @@ namespace Restaurant_Site.Services
     public class CustomerService: ICustomerService
     {
         ISQLRepository<Customer> _repository;
+
         public CustomerService(ISQLRepository<Customer> repository)
         {
             _repository = repository;
@@ -16,57 +17,55 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
         public IQueryable<Customer> GetAll(int skip, int take)
         {
             return _repository.GetAll().Skip(skip).Take(take);
         }
-
-        public Customer GetById(Guid id)
+        public async Task<Customer> GetById(Guid id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetById(id);
         }
 
-        public string Create(Customer item)
+        public Customer TryCreate(Customer item, out string message)
         {
-            if (string.IsNullOrEmpty(item.FirstName))
+            if (string.IsNullOrEmpty(item.FirstName) || string.IsNullOrEmpty(item.LastName) ||
+                string.IsNullOrEmpty(item.Address))
             {
-                return "The name cannot be empty";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                _repository.Create(item);
-                return $"Created new item with this ID: {item.Id}";
+                return _repository.TryCreate(item, out message);
             }
         }
 
-        public string Update(Guid id, Customer item)
+        public bool TryUpdate(Guid id, Customer item, out string message)
         {
-            var _item = _repository.GetById(id);
-            if (_item is not null)
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
+            else
             {
                 _item.FirstName = item.FirstName;
                 _item.LastName = item.LastName;
-                _item.ContactInfo=item.ContactInfo;
+                _item.Address = item.Address;
+                _item.ContactInfo = item.ContactInfo;
                 _item.Username = item.Username;
                 _item.Password = item.Password;
-                _item.Role = item.Role;
-                var result = _repository.Update(_item);
-                if (result)
-                    return "Item updated";
+
+                return _repository.TryUpdate(_item, out message);
             }
 
-            return "Item not updated";
         }
-
-        public string Delete(Guid id)
+        public bool TryDelete(Guid id, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Item deleted";
-            else
-                return "Item not found";
+            return _repository.TryDelete(id, out message);
         }
     }
 }
+
 

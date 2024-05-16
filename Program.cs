@@ -64,7 +64,7 @@ namespace Restaurant_Site
             builder.Services.AddMyServices();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddDefaultPolicy(
                     builder =>
                     {
                         builder.AllowAnyOrigin()
@@ -72,6 +72,7 @@ namespace Restaurant_Site
                                .AllowAnyMethod();
                     });
             });
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
@@ -85,12 +86,12 @@ namespace Restaurant_Site
                 app.UseSwagger();
                 app.UseSwaggerUI(); 
             }
-            app.UseCors("AllowAll");
+            app.UseCors();
             app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseMiddleware<ApplicationKeyMiddleware>();
             app.UseMiddleware<EndpointListenerMiddleware>();
            
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

@@ -6,51 +6,62 @@ namespace Restaurant_Site.Services
 {
     public class DeliveryService : IDeliveryService
     {
-        private readonly ISQLRepository<Delivery> _repository;
+        ISQLRepository<Delivery> _repository;
 
         public DeliveryService(ISQLRepository<Delivery> repository)
         {
             _repository = repository;
         }
-
         public IQueryable<Delivery> GetAll()
         {
             return _repository.GetAll();
         }
-
-        public Delivery GetById(Guid id)
+        public IQueryable<Delivery> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
+        }
+        public async Task<Delivery> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
         }
 
-        public string Create(Delivery item)
+        public Delivery TryCreate(Delivery item, out string message)
         {
-            _repository.Create(item);
-            return $"Created new delivery with this ID: {item.Id}";
-        }
-
-        public string Update(Guid id, Delivery item)
-        {
-            var existingDelivery = _repository.GetById(id);
-            if (existingDelivery != null)
+            if (string.IsNullOrEmpty(item.Address) || string.IsNullOrEmpty(item.ContactNumber))
             {
-                // Update existing delivery properties here
-                _repository.Update(existingDelivery);
-                return "Delivery updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                return "Delivery not found.";
+                return _repository.TryCreate(item, out message);
             }
         }
 
-        public string Delete(Guid id)
+        public bool TryUpdate(Guid id, Delivery item, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Delivery deleted successfully.";
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
             else
-                return "Delivery not found.";
+            {
+                _item.DeliveryDateTime = item.DeliveryDateTime;
+                _item.Address = item.Address;
+                _item.ContactNumber = item.ContactNumber;
+                _item.DeliveryFee= item.DeliveryFee;
+                _item.OrderId= item.OrderId;
+
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
+        {
+            return _repository.TryDelete(id, out message);
         }
     }
 }
+

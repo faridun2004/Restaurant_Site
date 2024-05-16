@@ -6,7 +6,7 @@ namespace Restaurant_Site.Services
 {
     public class EventService: IEventService
     {
-        private readonly ISQLRepository<Event> _repository;
+        ISQLRepository<Event> _repository;
 
         public EventService(ISQLRepository<Event> repository)
         {
@@ -17,38 +17,50 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
-        public Event GetById(Guid id)
+        public IQueryable<Event> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
+        }
+        public async Task<Event> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
         }
 
-        public string Create(Event item)
+        public Event TryCreate(Event item, out string message)
         {
-            _repository.Create(item);
-            return $"Created new event with this ID: {item.Id}";
-        }
-        public string Update(Guid id, Event item)
-        {
-            var existingEvent = _repository.GetById(id);
-            if (existingEvent != null)
+            if (string.IsNullOrEmpty(item.Name) || string.IsNullOrEmpty(item.Description))
             {
-                // Update existing event properties here
-                _repository.Update(existingEvent);
-                return "Event updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                return "Event not found.";
+                return _repository.TryCreate(item, out message);
             }
         }
-        public string Delete(Guid id)
+
+        public bool TryUpdate(Guid id, Event item, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Event deleted successfully.";
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
             else
-                return "Event not found.";
+            {
+                _item.Name = item.Name;
+                _item.Description = item.Description;
+                _item.EventDateTime = item.EventDateTime;
+                _item.Location= item.Location;
+
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
+        {
+            return _repository.TryDelete(id, out message);
         }
     }
 }

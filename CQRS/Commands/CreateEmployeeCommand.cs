@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Restaurant_Site.CQRS.Commands
 {
-    public class CreateEmployeeCommand : IRequest<Employee>
+    public class CreateEmployeeCommand : IRequest<(Employee, string)>
     {
         public string? FirstName { get; set; }
 
@@ -17,9 +17,9 @@ namespace Restaurant_Site.CQRS.Commands
         public string? ContactInfo { get; set; }
 
         public string? FullName => $"{FirstName} {LastName}";
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
         [Required]
         public string? RefreshToken { get; set; }
         public EmployeeRole Responsibility { get; set; }

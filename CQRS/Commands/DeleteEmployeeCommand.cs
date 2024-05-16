@@ -4,7 +4,7 @@ using Restaurant_Site.Models;
 
 namespace Restaurant_Site.CQRS.Commands
 {
-    public class DeleteEmployeeCommand : IRequest<string>
+    public class DeleteEmployeeCommand : IRequest<(bool,string)>
     {
         [FromQuery]
         public Guid EmployeeId { get; set; }

@@ -1,5 +1,12 @@
 ﻿using Restaurant_Site.IServices;
+using Restaurant_Site.IServices.IFinanceServices;
+using Restaurant_Site.Models.finances;
 using Restaurant_Site.Repository;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.IServices.IFinanceServices;
+using Restaurant_Site.server.Services;
+using Restaurant_Site.server.Services.FinanceServices;
+using Restaurant_Site.Services.FinanceServices;
 
 namespace Restaurant_Site.Services
 {
@@ -12,6 +19,7 @@ namespace Restaurant_Site.Services
             service.AddScoped<ICustomerService, CustomerService>();
             service.AddScoped<IProductService, ProductService>();
             service.AddScoped<IOrderService, OrderService>();
+            service.AddScoped<IOrderDetailService, OrderDetailService>();
             service.AddScoped<IPaymentService, PaymentService>();
             service.AddScoped<IReviewService, ReviewService>();
             service.AddScoped<IMenuService, MenuService>();
@@ -20,6 +28,12 @@ namespace Restaurant_Site.Services
             service.AddScoped<IDeliveryService, DeliveryService>();
             service.AddScoped<IEventService, EventService>();
             service.AddScoped<IShoppingCartService, ShoppingCartService>();
+            service.AddScoped<ICashRegisterService, CashRegisterService>();
+            service.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
+            service.AddScoped<IExpenseService, ExpenseService>();
+            service.AddScoped<IFinancialTransactionService, FinancialTransactionService>();
+            service.AddScoped<ISalaryService, SalaryService>();
+            service.AddScoped<ISaleService, SaleService>();
             service.AddScoped(typeof(ISQLRepository<>), typeof(SQLRepository<>));
         }
 

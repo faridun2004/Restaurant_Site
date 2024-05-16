@@ -6,7 +6,7 @@ namespace Restaurant_Site.Services
 {
     public class MenuService : IMenuService
     {
-         ISQLRepository<Menu> _repository;
+        ISQLRepository<Menu> _repository;
 
         public MenuService(ISQLRepository<Menu> repository)
         {
@@ -17,40 +17,47 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
-        public Menu GetById(Guid id)
+        public IQueryable<Menu> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
+        }
+        public async Task<Menu> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
         }
 
-        public string Create(Menu item)
+        public Menu TryCreate(Menu item, out string message)
         {
-            _repository.Create(item);
-            return $"Created new menu with this ID: {item.Id}";
-        }
-
-        public string Update(Guid id, Menu item)
-        {
-            var existingMenu = _repository.GetById(id);
-            if (existingMenu != null)
+            if (string.IsNullOrEmpty(item.ProductId.ToString()))
             {
-                existingMenu.Products = item.Products;
-                _repository.Update(existingMenu);
-                return "Menu updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                return "Menu not found.";
+                return _repository.TryCreate(item, out message);
             }
         }
 
-        public string Delete(Guid id)
+        public bool TryUpdate(Guid id, Menu item, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Menu deleted successfully.";
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
             else
-                return "Menu not found.";
+            {
+                _item.ProductId = item.ProductId;
+
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
+        {
+            return _repository.TryDelete(id, out message);
         }
     }
 }

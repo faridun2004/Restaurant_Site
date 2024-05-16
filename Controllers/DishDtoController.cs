@@ -26,7 +26,7 @@ namespace Restaurant_Site.Controllers
         [HttpGet("DishByHolderId")]
         public IEnumerable<ResponseDishDto> DishesByHolderId(RequestDishDtoByHolderId holderId)
         {
-            var dishes = _context.Products.Where(c => c.HolderId == holderId.HorderId);
+            var dishes = _context.Products.Where(c => c.Id == holderId.HorderId);
             return _mapper.Map<List<ResponseDishDto>>(dishes);
         }
         [HttpPost("Order")]

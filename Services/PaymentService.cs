@@ -1,11 +1,12 @@
 ﻿using Restaurant_Site.IServices;
 using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
+
 namespace Restaurant_Site.Services
 {
     public class PaymentService : IPaymentService
     {
-         ISQLRepository<Payment> _repository;
+        ISQLRepository<Payment> _repository;
 
         public PaymentService(ISQLRepository<Payment> repository)
         {
@@ -16,41 +17,45 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
-        public Payment GetById(Guid id)
+        public IQueryable<Payment> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
+        }
+        public async Task<Payment> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
         }
 
-        public string Create(Payment item)
+        public Payment TryCreate(Payment item, out string message)
         {
-            _repository.Create(item);
-            return $"Created new payment with this ID: {item.Id}";
-        }
-
-        public string Update(Guid id, Payment item)
-        {
-            var existingPayment = _repository.GetById(id);
-            if (existingPayment != null)
+            if (string.IsNullOrEmpty(item.Date.ToString()))
             {
-                existingPayment.Amount = item.Amount;
-                existingPayment.Date = item.Date;
-                _repository.Update(existingPayment);
-                return "Payment updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
+            }
+            return _repository.TryCreate(item, out message);
+        }
+
+        public bool TryUpdate(Guid id, Payment item, out string message)
+        {
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
             }
             else
             {
-                return "Payment not found.";
-            }
-        }
+                _item.Amount = item.Amount;
+                _item.Date = item.Date;
 
-        public string Delete(Guid id)
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Payment deleted successfully.";
-            else
-                return "Payment not found.";
+            return _repository.TryDelete(id, out message);
         }
     }
 }

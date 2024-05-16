@@ -6,23 +6,23 @@ using Restaurant_Site.Models;
 
 namespace Restaurant_Site.CQRS.Handlers
 {
-    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, string>
+    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand,(bool, string)>
     {
-        private IProductService _service;
+        private IEmployeeService _service;
         private readonly IMapper _mapper;
 
-        public UpdateEmployeeCommandHandler(IProductService service, IMapper mapper)
+        public UpdateEmployeeCommandHandler(IEmployeeService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
         }
 
-        public Task<string> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
+        public Task<(bool,string)> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            var employee = _mapper.Map<Product>(request);
-            var result = _service.Update(request.EmployeeId, employee);
+            var employee = _mapper.Map<Employee>(request);
+            var result = _service.TryUpdate(request.EmployeeId, employee, out string message); ;
 
-            return Task.FromResult(result);
+            return Task.FromResult((result,message));
         }
     
     }

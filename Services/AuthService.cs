@@ -37,15 +37,16 @@ namespace Restaurant_Site.Services
 
                 if (user.IsBlocked)
                     throw new ArgumentException("User does not have access to login.");
-            var userRoles = new string[] { user.Role };
+            var userRoles = new string[] { user.Role ?? "User"};
             var claims = new List<Claim> {
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Name, user.FullName)
+               
             };
             foreach (var userRole in userRoles)
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
 
+            var expireTime = DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME));
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
                         issuer: AuthOptions.ISSUER,
@@ -60,7 +61,7 @@ namespace Restaurant_Site.Services
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-                return new TokenInfo { AccessToken = accessToken, RefreshToken = refreshToken };
+                return new TokenInfo { AccessToken = accessToken, RefreshToken = refreshToken, ExpireTime = expireTime };
             }
         }
 }

@@ -6,7 +6,7 @@ namespace Restaurant_Site.Services
 {
     public class InventoryService : IInventoryService
     {
-        private ISQLRepository<Inventory> _repository;
+        ISQLRepository<Inventory> _repository;
 
         public InventoryService(ISQLRepository<Inventory> repository)
         {
@@ -17,41 +17,48 @@ namespace Restaurant_Site.Services
         {
             return _repository.GetAll();
         }
-
-        public Inventory GetById(Guid id)
+        public IQueryable<Inventory> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
+        }
+        public async Task<Inventory> GetById(Guid id)
+        {
+            return await _repository.GetById(id);
         }
 
-        public string Create(Inventory item)
+        public Inventory TryCreate(Inventory item, out string message)
         {
-            _repository.Create(item);
-            return $"Created new inventory item with this ID: {item.Id}";
-        }
-
-        public string Update(Guid id, Inventory item)
-        {
-            var existingInventory = _repository.GetById(id);
-            if (existingInventory != null)
+            if (string.IsNullOrEmpty(item.Name))
             {
-                existingInventory.Name = item.Name;
-                existingInventory.Quantity = item.Quantity;
-                _repository.Update(existingInventory);
-                return "Inventory item updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                return "Inventory item not found.";
+                return _repository.TryCreate(item, out message);
             }
         }
 
-        public string Delete(Guid id)
+        public bool TryUpdate(Guid id, Inventory item, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Inventory item deleted successfully.";
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
             else
-                return "Inventory item not found.";
+            {
+                _item.Name = item.Name;
+                _item.Quantity = item.Quantity;
+
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
+        {
+            return _repository.TryDelete(id, out message);
         }
     }
 }

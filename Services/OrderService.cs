@@ -1,61 +1,64 @@
-﻿using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
+﻿using Restaurant_Site.Models;
 using Restaurant_Site.Repository;
-using System;
-using System.Linq;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
 
-namespace Restaurant_Site.Services
+namespace Restaurant_Site.server.Services
 {
     public class OrderService : IOrderService
     {
-         ISQLRepository<Order> _repository;
+        ISQLRepository<Order> _repository;
 
         public OrderService(ISQLRepository<Order> repository)
         {
             _repository = repository;
         }
+
         public IQueryable<Order> GetAll()
         {
             return _repository.GetAll();
         }
-        public Order GetById(Guid id)
+        public IQueryable<Order> GetAll(int skip, int take)
         {
-            return _repository.GetById(id);
+            return _repository.GetAll().Skip(skip).Take(take);
         }
-        public string Create(Order item)
+        public async Task<Order> GetById(Guid id)
         {
-            // Ваша логика валидации и обработки создания заказа
-            _repository.Create(item);
-            return $"Created new item with this ID: {item.Id}";
+            return await _repository.GetById(id);
         }
-        public string Update(Guid id, Order item)
+
+        public Order TryCreate(Order item, out string message)
         {
-            // Ваша логика обновления заказа
-            var existingOrder = _repository.GetById(id);
-            if (existingOrder != null)
+            if (string.IsNullOrEmpty(item.Id.ToString()))
             {
-                // Обновляем данные заказа
-                existingOrder.products = item.products;
-                existingOrder.customer = item.customer;
-                existingOrder.table = item.table;
-                existingOrder.status = item.status;
-                // Сохраняем обновленные данные в репозитории
-                _repository.Update(existingOrder);
-                return "Order updated successfully.";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                return "Order not found.";
+                return _repository.TryCreate(item, out message);
             }
         }
-        public string Delete(Guid id)
+
+        public bool TryUpdate(Guid id, Order item, out string message)
         {
-            // Ваша логика удаления заказа
-            var result = _repository.Delete(id);
-            if (result)
-                return "Order deleted successfully.";
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
             else
-                return "Order not found.";
+            {
+                _item.OrderDetails = item.OrderDetails;
+
+                return _repository.TryUpdate(_item, out message);
+            }
+
+        }
+        public bool TryDelete(Guid id, out string message)
+        {
+            return _repository.TryDelete(id, out message);
         }
     }
 }

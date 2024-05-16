@@ -3,7 +3,6 @@ using Restaurant_Site.Models;
 using Restaurant_Site.Models.Enums;
 using Restaurant_Site.Repository;
 
-
 namespace Restaurant_Site.Services
 {
     public class EmployeeService : IEmployeeService
@@ -18,61 +17,57 @@ namespace Restaurant_Site.Services
             _cookSemaphore = new SemaphoreSlim(maxChefs);
             _chefs = repository.GetAll().Where(e => e.Responsibility == EmployeeRole.Chef).ToList();
         }
+        
         public IQueryable<Employee> GetAll()
         {
             return _repository.GetAll();
         }
-
         public IQueryable<Employee> GetAll(int skip, int take)
         {
             return _repository.GetAll().Skip(skip).Take(take);
         }
-
-        public Employee GetById(Guid id)
+        public async Task<Employee> GetById(Guid id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetById(id);
         }
 
-        public string Create(Employee item)
+        public Employee TryCreate(Employee item, out string message)
         {
-            if (string.IsNullOrEmpty(item.FirstName))
+            if (string.IsNullOrEmpty(item.FullName) || string.IsNullOrEmpty(item.LastName))
             {
-                return "The name cannot be empty";
+                message = "The name or description is be empty!";
+                return default;
             }
             else
             {
-                _repository.Create(item);
-                return $"Created new item with this ID: {item.Id}";
+                return _repository.TryCreate(item, out message);
             }
         }
-
-        public string Update(Guid id, Employee item)
+        public bool TryUpdate(Guid id, Employee item, out string message)
         {
-            var _item = _repository.GetById(id);
-            if (_item is not null)
+            var _item = _repository.GetById(id).GetAwaiter().GetResult();
+            if (_item is null)
+            {
+                message = "Item not found";
+                return false;
+            }
+            else
             {
                 _item.FirstName = item.FirstName;
                 _item.LastName = item.LastName;
-                _item.ContactInfo = item.ContactInfo;
-                _item.Responsibility = item.Responsibility;
-                _item.Username = item.Username;
-                _item.Password = item.Password;
+                _item.Address = item.Address;
+                _item.ContactInfo= item.ContactInfo;
+                _item.Username= item.Username;
+                _item.Password= item.Password;
                 _item.Role = item.Role;
-                var result = _repository.Update(_item);
-                if (result)
-                    return "Item updated";
+
+                return _repository.TryUpdate(_item, out message);
             }
 
-            return "Item not updated";
         }
-
-        public string Delete(Guid id)
+        public bool TryDelete(Guid id, out string message)
         {
-            var result = _repository.Delete(id);
-            if (result)
-                return "Item deleted";
-            else
-                return "Item not found";
+            return _repository.TryDelete(id, out message);
         }
 
         public async Task<bool> ProcessOrderAsync(Order order)
@@ -102,26 +97,14 @@ namespace Restaurant_Site.Services
             }
         }
 
-
         private Employee GetAvailableChef()
         {
-            foreach (var chef in _chefs)
-            {
-                // Проверяем доступность повара
-                // В данном примере просто проверяем, что повар не занят (нет логики реального времени)
-                if (chef != null)
-                {
-                    return chef; // Используем тип Chef вместо Employee
-                }
-            }
-
-            return null; // Нет доступных поваров
+            return _chefs.FirstOrDefault(chef => chef != null && chef.IsAvailable);
         }
-
         private async Task CookOrderAsync(Employee chef, Order order)
         {
             // Логика приготовления заказа
-            await Task.Delay(3000); // Симуляция времени приготовления
+            await Task.Delay(3000); 
         }
     }
 }

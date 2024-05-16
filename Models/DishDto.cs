@@ -10,9 +10,7 @@ namespace Restaurant_Site.Models
         public string? Photo { get; set; }
         public ProductType dishType { get; set; }
         public Guid HolderId { get; set; }
-
         public Guid IssuerId { get; set; }
-
         public ProductStatus dishStatus { get; set; } = ProductStatus.JustOrdered;
     }
 }

@@ -5,7 +5,7 @@ using Restaurant_Site.IServices;
 
 namespace Restaurant_Site.CQRS.Handlers
 {
-    public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, string>
+    public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, (bool,string)>
     {
         private IEmployeeService _service;
         private readonly IMapper _mapper;
@@ -16,10 +16,11 @@ namespace Restaurant_Site.CQRS.Handlers
             _mapper = mapper;
         }
 
-        public Task<string> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
+        public Task<(bool, string)> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
         {
-            var result = _service.Delete(request.EmployeeId);
-            return Task.FromResult(result);
+            var result = _service.TryDelete(request.EmployeeId, out string message);
+            ;
+            return Task.FromResult((result, message));
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Restaurant_Site.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public abstract class BaseController<TEntity> : ControllerBase where TEntity : BaseEntity
     {
         protected readonly IBaseService<TEntity> _baseService;
@@ -38,27 +38,42 @@ namespace Restaurant_Site.Controllers
         [HttpGet("GetElementById")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(BaseEntity), (int)HttpStatusCode.OK)]
-        public virtual TEntity Get(Guid id)
+        public virtual async Task<ActionResult<TEntity>> Get(Guid id)
         {
-            return _baseService.GetById(id);
+            var item=await _baseService.GetById(id);
+            if(item is null)
+                return NotFound(404);
+            return Ok(item);
         }
 
         [HttpPost("Create")]
-        public virtual string Post([FromBody] TEntity item)
+        public virtual ActionResult<TEntity> Post([FromBody] TEntity item)
         {
-            return _baseService.Create(item);
+            var createdItem = _baseService.TryCreate(item, out string message);
+            if (createdItem is null)
+                return BadRequest(message);
+
+            return Ok(createdItem);
         }
 
         [HttpPut("Update")]
-        public virtual string Put([FromQuery] Guid id, [FromBody] TEntity item)
+        public virtual ActionResult<string> Put([FromQuery] Guid id, [FromBody] TEntity item)
         {
-            return _baseService.Update(id, item);
+            var updated = _baseService.TryUpdate(id, item, out string message);
+            if (!updated)
+                return BadRequest(message);
+
+            return Ok("Successfully updated");
         }
 
         [HttpDelete("Delete")]
-        public virtual string Delete([FromQuery] Guid id)
+        public virtual ActionResult<string> Delete([FromQuery] Guid id)
         {
-            return _baseService.Delete(id);     
+            var deleted = _baseService.TryDelete(id, out string message);
+            if (!deleted)
+                return BadRequest(message);
+
+            return Ok("Successfully deleted");
         }
     }
 }

@@ -12,21 +12,6 @@ namespace Restaurant_Site.Services
         {
             _dishService = dishService;
         }
-        public decimal CalculateTotalPrice()
-        {
-            decimal totalPrice = 0;
-
-            foreach (var (dishId, quantity) in _cartItems)
-            {
-                var dish = _dishService.GetById(dishId);
-                if (dish != null)
-                {
-                    totalPrice += (decimal)dish.Price * (decimal)quantity;
-                }
-            }
-
-            return totalPrice;
-        }
         public IEnumerable<ShopingCartItem> GetAll()
         {
             List<ShopingCartItem> allItems = new List<ShopingCartItem>();
