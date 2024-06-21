@@ -1,8 +1,8 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models;
 using Restaurant_Site.server.Infrastructure;
 
 
-namespace Restaurant_Site.Repository
+namespace Restaurant_Site.server.Repository
 {
     public interface ISQLRepository<T> where T : BaseEntity
     {

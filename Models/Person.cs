@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Restaurant_Site.Models
+namespace Restaurant_Site.server.Models
 {
     public abstract class Person: BaseEntity
     {

@@ -1,6 +1,6 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models;
 
-namespace Restaurant_Site.IServices
+namespace Restaurant_Site.server.IServices
 {
     public interface IDeliveryService: IBaseService<Delivery>
     {}

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Controllers;
-using Restaurant_Site.IServices.IFinanceServices;
-using Restaurant_Site.Models.finances;
+using Restaurant_Site.server.Controllers;
+using Restaurant_Site.server.IServices.IFinanceServices;
+using Restaurant_Site.server.Models.finances;
 
 namespace Restaurant_Site.server.Controllers.FinanceControllers
 {
@@ -14,16 +14,6 @@ namespace Restaurant_Site.server.Controllers.FinanceControllers
         public SalaryController(ILogger<SalaryController> logger, ISalaryService salaryService)
             : base(logger, salaryService)
         {}
-        //[HttpGet("SalariesForEmployee/{employeeId}")]
-        //[AllowAnonymous]
-        //public IActionResult GetSalariesForEmployee(Guid employeeId)
-        //{
-        //    var salaries = _baseService.GetSalariesForEmployee(employeeId);
-        //    if (salaries == null || !salaries.Any())
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(salaries);
-        //}
+
     }
 }

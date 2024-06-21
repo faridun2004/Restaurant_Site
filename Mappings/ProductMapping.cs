@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Restaurant_Site.CQRS.Commands;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.CQRS.Commands;
+using Restaurant_Site.server.Models;
 
 namespace Restaurant_Site.Mappings
 {
@@ -8,8 +8,8 @@ namespace Restaurant_Site.Mappings
     {
         public ProductMapping()
         {
-            CreateMap<CreateProductCommand, Product>();
-            CreateMap<UpdateProductCommand, Product>();
+            CreateMap<CreateEmployeeCommand, Employee>();
+            CreateMap<UpdateEmployeeCommand, Employee>();
         }
     }
 }

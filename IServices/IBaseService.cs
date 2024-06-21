@@ -1,23 +1,13 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models;
 
-namespace Restaurant_Site.IServices
+namespace Restaurant_Site.server.IServices
 {
     public interface IBaseService<TEntity> where TEntity : BaseEntity
-    {      
+    {
         IQueryable<TEntity> GetAll();
-
-        /// <summary>
-        /// This is for getting item by Id
-        /// </summary>
-        /// <param name="id">Id of item</param>
-        /// <returns>returns item if found otherwise null</returns>
         Task<TEntity> GetById(Guid id);
-
         TEntity TryCreate(TEntity item, out string message);
-
         bool TryUpdate(Guid id, TEntity item, out string message);
-
         bool TryDelete(Guid id, out string message);
-        
     }
 }   

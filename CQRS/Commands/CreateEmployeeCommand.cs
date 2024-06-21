@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Restaurant_Site.Models;
-using Restaurant_Site.Models.Enums;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Restaurant_Site.CQRS.Commands
+namespace Restaurant_Site.server.CQRS.Commands
 {
     public class CreateEmployeeCommand : IRequest<(Employee, string)>
     {

@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using Microsoft.Extensions.Logging;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Services;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Services;
 using MediatR;
 using Restaurant_Site.server.Models;
 
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("[controller]")]

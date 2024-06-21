@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Middlewares
+﻿namespace Restaurant_Site.server.Middlewares
 {
     public class ApplicationKeyMiddleware
     {

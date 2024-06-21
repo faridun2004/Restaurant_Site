@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Contracts;
-using Restaurant_Site.Services;
+using Restaurant_Site.server.Contracts;
+using Restaurant_Site.server.Services;
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("[controller]")]

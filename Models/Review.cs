@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Models
+﻿namespace Restaurant_Site.server.Models
 {
     // Класс модели для отзыва
     public class Review : BaseEntity

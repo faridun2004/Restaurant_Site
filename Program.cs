@@ -1,22 +1,18 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Restaurant_Site.Auth;
-using Restaurant_Site.Infrastructure;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Middlewares;
-using Restaurant_Site.Models;
-using Restaurant_Site.Repository;
-using Restaurant_Site.Services;
-using Restaurant_Site.Validations;
+using Restaurant_Site.server.Auth;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Middlewares;
+using Restaurant_Site.server.Services;
+using Restaurant_Site.server.Validations;
 using System.Text.Json.Serialization;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
+using Restaurant_Site.Infrastructure;
 namespace Restaurant_Site
 {
     public class Program
     {
-        public const string AppKey = "TestKey";
         public static void Main(string[] args)
         {  
             var builder = WebApplication.CreateBuilder(args);
@@ -25,13 +21,13 @@ namespace Restaurant_Site
             builder.Services.AddMyAuth();
             // Add services to the container.
             builder.Services.AddDbContext<RestaurantContext>(con => con.UseSqlServer(builder.Configuration["ConnectionString"])
-                      .LogTo(Console.Write, LogLevel.Error)
-          .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+                            .LogTo(Console.Write, LogLevel.Error)
+                            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             builder.Services.AddLogging();
 
             
             builder.Services.AddControllers()
-           .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+                            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
@@ -72,13 +68,23 @@ namespace Restaurant_Site
                                .AllowAnyMethod();
                     });
             });
-
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetService<RestaurantContext>();
-                context.Database.Migrate();
+#if DEBUG
+                if (builder.Environment.IsEnvironment("Test"))
+                {
+                    context.Database.EnsureCreated();
+                }
+                else
+                {
+#endif
+                    context.Database.Migrate();
+#if DEBUG
+                }
+#endif
             }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -93,8 +99,11 @@ namespace Restaurant_Site
            
             //app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseRouting();
             app.UseAuthorization();
             app.MapControllers();
+
             app.Run();
         }
     }

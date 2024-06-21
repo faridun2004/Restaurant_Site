@@ -1,7 +1,7 @@
-﻿using Restaurant_Site.IServices.IFinanceServices;
-using Restaurant_Site.Models;
-using Restaurant_Site.Models.finances;
-using Restaurant_Site.Repository;
+﻿using Restaurant_Site.server.IServices.IFinanceServices;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Models.finances;
+using Restaurant_Site.server.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

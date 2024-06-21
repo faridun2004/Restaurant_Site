@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using Restaurant_Site.CQRS.Commands;
-using Restaurant_Site.IServices;
+using Restaurant_Site.server.CQRS.Commands;
+using Restaurant_Site.server.IServices;
 
-namespace Restaurant_Site.CQRS.Handlers
+namespace Restaurant_Site.server.CQRS.Handlers
 {
     public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, (bool,string)>
     {

@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
-using System.Net;
-using Table = Restaurant_Site.Models.Table;
+using Restaurant_Site.server.IServices;
+using Table = Restaurant_Site.server.Models.Table;
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("Table")]

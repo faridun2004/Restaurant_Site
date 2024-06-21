@@ -1,15 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.CQRS.Commands;
-using Restaurant_Site.CQRS.Queries;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.CQRS.Commands;
+using Restaurant_Site.server.CQRS.Queries;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
 using Restaurant_Site.server.Controllers;
 using Restaurant_Site.server.CQRS.Queries;
 using Restaurant_Site.server.IServices;
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("Employee")]  

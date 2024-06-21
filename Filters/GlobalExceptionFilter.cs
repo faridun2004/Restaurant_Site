@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
-namespace Restaurant_Site.Filters
+namespace Restaurant_Site.server.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class GlobalExceptionFilter: ExceptionFilterAttribute

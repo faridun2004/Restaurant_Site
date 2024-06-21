@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Contracts
+﻿namespace Restaurant_Site.server.Contracts
 {
     public record TokenInfo
     {

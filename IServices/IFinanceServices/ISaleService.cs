@@ -1,11 +1,13 @@
-﻿using Restaurant_Site.Models.finances;
+﻿using Restaurant_Site.server.Models.finances;
 
-namespace Restaurant_Site.IServices.IFinanceServices
+namespace Restaurant_Site.server.IServices.IFinanceServices
 {
-    public interface ISaleService : IBaseService<Sale>
+    public interface ISaleService 
     {
-        IEnumerable<Sale> GetSalesForEmployee(Guid employeeId);
-        IEnumerable<Sale> GetSalesInPeriod(DateTime startDate, DateTime endDate);
-        decimal GetTotalSalesAmountForEmployee(Guid employeeId);
+        IQueryable<Sale> GetAllSales();
+        Task<Sale> GetSaleById(Guid id);
+        Sale TryCreateSale(Sale sale, out string message);
+        bool TryUpdateSale(Sale sale, out string message);
+        bool TryDeleteSale(Guid id, out string message);
     }
 }

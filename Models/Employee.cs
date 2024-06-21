@@ -1,9 +1,9 @@
-﻿using Restaurant_Site.Models.Enums;
-using Restaurant_Site.Models.finances;
+﻿using Restaurant_Site.server.Models.Enums;
+using Restaurant_Site.server.Models.finances;
 using Restaurant_Site.server.Models;
 using System.Text.Json.Serialization;
 
-namespace Restaurant_Site.Models
+namespace Restaurant_Site.server.Models
 {
     public class Employee: Person
     {
@@ -12,6 +12,6 @@ namespace Restaurant_Site.Models
         [JsonIgnore]
         public ICollection<OrderDetail>? Orders { get; set; }
         public List<Salary>? Salaries { get;  set; }
-        public List<Sale>? Sales { get; internal set; }
+        public ICollection<Sale>? Sales { get; internal set; }
     }
 }
