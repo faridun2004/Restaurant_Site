@@ -1,16 +1,16 @@
-﻿namespace Restaurant_Site.Models
+﻿namespace Restaurant_Site.server.Models
 {
-    public abstract class BaseEntity
-    {
-        public Guid Id { get; set; }
+        public abstract class BaseEntity
+        {
+            public Guid Id { get; set; }
 
-        public BaseEntity()
-        {
-            Id = Guid.NewGuid();
+            public BaseEntity()
+            {
+                Id = Guid.NewGuid();
+            }
+            public override string ToString()
+            {
+                return $"Id:{Id} ({GetType().Name})";
+            }
         }
-        public override string ToString()
-        {
-            return $"Id:{Id} ({GetType().Name})";
-        }
-    }
 }

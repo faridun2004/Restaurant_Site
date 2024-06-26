@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Restaurant_Site.Auth
+namespace Restaurant_Site.server.Auth
 {
     public static class ServiceCollectionExtensions
     {

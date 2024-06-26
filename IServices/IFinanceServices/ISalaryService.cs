@@ -1,7 +1,7 @@
-﻿using Restaurant_Site.Models;
-using Restaurant_Site.Models.finances;
+﻿using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Models.finances;
 
-namespace Restaurant_Site.IServices.IFinanceServices
+namespace Restaurant_Site.server.IServices.IFinanceServices
 {
     public interface ISalaryService : IBaseService<Salary>
     {

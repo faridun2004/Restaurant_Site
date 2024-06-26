@@ -1,6 +1,6 @@
-﻿namespace Restaurant_Site.Models.finances
+﻿namespace Restaurant_Site.server.Models.finances
 {
-    //Категория расходов
+    
     public class ExpenseCategory:BaseEntity
     {
         public string? Name { get; set; }

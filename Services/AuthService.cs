@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Restaurant_Site.Auth;
-using Restaurant_Site.Contracts;
 using Restaurant_Site.Infrastructure;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.Auth;
+using Restaurant_Site.server.Contracts;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace Restaurant_Site.Services
+namespace Restaurant_Site.server.Services
 {
     public class AuthService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Restaurant_Site.Extensions
+namespace Restaurant_Site.server.Extensions
 {
     public static class ClaimsPrincipalExtension
     {

@@ -2,13 +2,14 @@
 using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Contracts;
-using Restaurant_Site.Extensions;
 using Restaurant_Site.Infrastructure;
-using Restaurant_Site.Models;
-using Restaurant_Site.Validations;
+using Restaurant_Site.server.Contracts;
+using Restaurant_Site.server.Extensions;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Validations;
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -24,11 +25,11 @@ namespace Restaurant_Site.Controllers
             _mapper = mapper;
         }
         [HttpGet("DishByHolderId")]
-        public IEnumerable<ResponseDishDto> DishesByHolderId(RequestDishDtoByHolderId holderId)
-        {
-            var dishes = _context.Products.Where(c => c.Id == holderId.HorderId);
-            return _mapper.Map<List<ResponseDishDto>>(dishes);
-        }
+        //public IEnumerable<ResponseDishDto> DishesByHolderId(RequestDishDtoByHolderId holderId)
+        //{
+        //    //var dishes = _context.Products.Where(c => c.Id == holderId.HorderId);
+        //    //return _mapper.Map<List<ResponseDishDto>>(dishes);
+        //}
         [HttpPost("Order")]
         [Authorize]
         public string OrderDish(RequestOrderDishDto requestOrder)

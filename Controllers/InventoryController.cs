@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
 using System.Net;
 
-namespace Restaurant_Site.Controllers
+namespace Restaurant_Site.server.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,65 +1,48 @@
-﻿using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
-using Restaurant_Site.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Repository;
+using Restaurant_Site.server.Repository;
 
-namespace Restaurant_Site.Services
+namespace Restaurant_Site.server.Services
 {
     public class ProductService : IProductService
     {
-         ISQLRepository<Product> _repository;
+        private readonly IProductRepository _productRepository;
 
-        public ProductService(ISQLRepository<Product> repository)
+        public ProductService(IProductRepository productRepository)
         {
-            _repository = repository;
-        }
-
-        public IQueryable<Product> GetAll()
-        {
-            return _repository.GetAll();
-        }
-        public IQueryable<Product> GetAll(int skip, int take)
-        {
-            return _repository.GetAll().Skip(skip).Take(take);
-        }
-        public async Task<Product> GetById(Guid id)
-        {
-            return await _repository.GetById(id);
+            _productRepository = productRepository;
         }
 
-        public Product TryCreate(Product item, out string message)
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            if(string.IsNullOrEmpty(item.Name) || string.IsNullOrEmpty(item.Description)) 
-            {
-                message = "The name or description is be empty!";
-                return default;
-            }
-            else
-            {
-                return _repository.TryCreate(item, out message);
-            }
+            return await _productRepository.GetAllAsync();
         }
 
-        public bool TryUpdate(Guid id, Product item, out string message)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            var _item=_repository.GetById(id).GetAwaiter().GetResult();
-            if(_item is null)
-            {
-                message = "Item not found";
-                return false;
-            }
-            else
-            {
-                _item.Name = item.Name;
-                _item.Description = item.Description;
-                _item.Price = item.Price;
-                
-                return _repository.TryUpdate(_item, out message);
-            }
-           
+            return await _productRepository.GetByIdAsync(id);
         }
-        public bool TryDelete(Guid id, out string message)
+
+        public async Task AddAsync(Product product)
         {
-            return _repository.TryDelete(id, out message);
+            await _productRepository.AddAsync(product);
+        }
+
+        public async Task UpdateAsync(Product product)
+        {
+            await _productRepository.UpdateAsync(product);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _productRepository.DeleteAsync(id);
+        }
+        public async Task<List<Product>> GetProductsByCategoryIdAsync(int categoryId)
+        {
+            return await _productRepository.GetProductsByCategoryIdAsync(categoryId);
         }
     }
+
 }

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
-using Restaurant_Site.CQRS.Commands;
-using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
+using Restaurant_Site.server.CQRS.Commands;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
 
-namespace Restaurant_Site.CQRS.Handlers
+namespace Restaurant_Site.server.CQRS.Handlers
 {
     public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand,(bool, string)>
     {

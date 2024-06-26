@@ -1,36 +1,81 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.CQRS.Queries;
-using Restaurant_Site.Models.finances;
+using Restaurant_Site.server.CQRS.Queries;
+using Restaurant_Site.server.IServices.IFinanceServices;
+using Restaurant_Site.server.Models.finances;
 
-namespace Restaurant_Site.Controllers.FinanceControllers
+namespace Restaurant_Site.server.Controllers.FinanceControllers
 {
-    [Authorize(Roles = "manager")]
+    [Authorize(Roles ="Manager")]
     [ApiController]
-    [Route("Sales")]
+    [Route("api/[controller]")]
     public class SalesController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public SalesController(IMediator mediator) 
-        { 
-            _mediator = mediator;
-        }
-        [HttpGet("AllSales")] 
-        public async Task<ActionResult<List<Sale>>> GetAll() 
+        private readonly ISaleService _saleService;
+
+        public SalesController(ISaleService saleService)
         {
-            var query = new GetAllProductsQuery();
-            var products = await _mediator.Send(query);
-            return Ok(products);
+            _saleService = saleService;
         }
-        [HttpGet("GetSalesById")]
-        public async Task<ActionResult<List<Sale>>> GetById(Guid id)
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult GetAllSales()
         {
-            var query = new GetAllProductsQuery();
-            var products = await _mediator.Send(query);
-            return Ok(products);
+            var sales = _saleService.GetAllSales();
+            return Ok(sales);
+        }
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSaleById(Guid id)
+        {
+            var sale = await _saleService.GetSaleById(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+            return Ok(sale);
         }
 
+        [HttpPost]
+        public IActionResult CreateSale(Sale sale)
+        {
+            string message;
+            var createdSale = _saleService.TryCreateSale(sale, out message);
+            if (createdSale == null)
+            {
+                return BadRequest(message);
+            }
+            return CreatedAtAction(nameof(GetSaleById), new { id = createdSale.Id }, createdSale);
+        }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateSale(Guid id, Sale sale)
+        {
+            if (id != sale.Id)
+            {
+                return BadRequest("Sale ID mismatch");
+            }
+
+            string message;
+            var success = _saleService.TryUpdateSale(sale, out message);
+            if (!success)
+            {
+                return BadRequest(message);
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteSale(Guid id)
+        {
+            string message;
+            var success = _saleService.TryDeleteSale(id, out message);
+            if (!success)
+            {
+                return BadRequest(message);
+            }
+            return NoContent();
+        }
     }
 }

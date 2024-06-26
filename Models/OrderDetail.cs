@@ -1,11 +1,12 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models.Enums;
+using Restaurant_Site.server.Models.finances;
 
 namespace Restaurant_Site.server.Models
 {
     public class OrderDetail : BaseEntity
     {
         public Product? Product { get; set; }
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice => Product.Price * Quantity;
         public Customer? Customer { get; set; }
@@ -17,7 +18,7 @@ namespace Restaurant_Site.server.Models
         public Order? Order { get; set; }
         public Guid OrderId { get; set; }
         public OrderStatus? status { get; set; }
-        public DateTime CretionalDate { get; internal set; } = DateTime.Now;
+        public DateTime CreationDate { get; internal set; }
         public DateTime EditDate { get; internal set; }
 
     }

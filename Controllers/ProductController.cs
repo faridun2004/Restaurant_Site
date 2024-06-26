@@ -1,68 +1,123 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Models;
-using Restaurant_Site.IServices;
-using MediatR;
-using Restaurant_Site.CQRS.Commands;
-using Restaurant_Site.CQRS.Queries;
-using Microsoft.AspNetCore.Authorization;
-namespace Restaurant_Site.Controllers
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models.finances;
+
+namespace Restaurant_Site.server.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    [Authorize]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IProductService _dishService;
+        private readonly IProductCategoryService _categoryService;
+        private readonly IWebHostEnvironment _environment;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductController(IMediator mediator)
+        public ProductsController(IProductService dishService, IWebHostEnvironment environment, ILogger<ProductsController> logger, IProductCategoryService categoryService)
         {
-            _mediator = mediator;
+            _dishService = dishService;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _categoryService = categoryService;
         }
-        [HttpGet("AllProducts")]
-        public async Task<ActionResult<List<Product>>> GetAllProducts()
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var query = new GetAllProductsQuery();
-            var products = await _mediator.Send(query);
-            return Ok(products);
+            var dishes = await _dishService.GetAllAsync();
+            return Ok(dishes);
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProductById(Guid id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var query = new GetProductByIdQuery() { Id = id };
-            var product = await _mediator.Send(query);
-            if (product == null)
+            var dish = await _dishService.GetByIdAsync(id);
+            if (dish == null)
+            {
                 return NotFound();
-
-            return Ok(product);
+            }
+            return Ok(dish);
         }
+
         [HttpPost]
-        public async Task<ActionResult<Product>> Createproduct(CreateProductCommand command)
+        public async Task<ActionResult<Product>> PostProduct([FromForm] ProductCreateDto productDto)
         {
-            var (createdItem, message)=await _mediator.Send(command);
-            if(createdItem is null)
-                return BadRequest(message);
-            return Ok(createdItem);
+            if (productDto.ImageFile != null)
+            {
+                var imageUrl = await SaveImage(productDto.ImageFile);
+                var product = new Product
+                {
+                    Name = productDto.Name,
+                    Description = productDto.Description,
+                    ImageUrl = imageUrl,
+                    Price = productDto.Price,
+                    Status=productDto.Status.Value,
+                    DishType=productDto.Type.Value,
+                    Sales = new List<Sale>(),
+                    ProductCategoryId = productDto.ProductCategoryId
+
+                };
+
+                await _dishService.AddAsync(product);
+                return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            }
+            return BadRequest("Image file is required.");
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<string>> UpdateProduct(Guid id, UpdateProductCommand command)
+        public async Task<IActionResult> PutProduct(int id, [FromForm] ProductCreateDto productDto)
         {
-            command.ProductId = id;
-            var (result, message) = await _mediator.Send(command);
-            if (result)
-                return Ok(message);
+            var existingDish = await _dishService.GetByIdAsync(id);
+            if (existingDish == null)
+            {
+                return NotFound();
+            }
 
-            return BadRequest(message);
+            if (productDto.ImageFile != null)
+            {
+                var imageUrl = await SaveImage(productDto.ImageFile);
+                existingDish.ImageUrl = imageUrl;
+            }
+
+            existingDish.Name = productDto.Name;
+            existingDish.Description = productDto.Description;
+            existingDish.Price = productDto.Price;
+
+            await _dishService.UpdateAsync(existingDish);
+            return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteProduct(DeleteProductCommand deleteProduct)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var (result, message) = await _mediator.Send(deleteProduct);
-            if (result)
-                return Ok(message);
+            await _dishService.DeleteAsync(id);
+            return NoContent();
+        }
 
-            return BadRequest(message);
+        private async Task<string> SaveImage(IFormFile imageFile)
+        {
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploads))
+            {
+                Directory.CreateDirectory(uploads);
+            }
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            var filePath = Path.Combine(uploads, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            return $"/uploads/{fileName}";
+        }
+
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetByCategory(int categoryId)
+        {
+            var products = await _dishService.GetProductsByCategoryIdAsync(categoryId);
+            return Ok(products);
         }
     }
 }

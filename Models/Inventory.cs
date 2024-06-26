@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Models
+﻿namespace Restaurant_Site.server.Models
 {
     // Класс модели для склада
     public class Inventory : BaseEntity

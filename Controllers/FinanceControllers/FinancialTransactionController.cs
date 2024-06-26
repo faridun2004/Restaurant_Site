@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant_Site.Controllers;
-using Restaurant_Site.Models.finances;
+using Restaurant_Site.server.Controllers;
+using Restaurant_Site.server.Models.finances;
 using Restaurant_Site.server.IServices.IFinanceServices;
 
 namespace Restaurant_Site.server.Controllers.FinanceControllers

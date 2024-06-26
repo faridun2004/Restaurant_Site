@@ -1,8 +1,8 @@
-﻿using Restaurant_Site.IServices;
-using Restaurant_Site.Models;
-using Restaurant_Site.Repository;
+﻿using Restaurant_Site.server.IServices;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Repository;
 
-namespace Restaurant_Site.Services
+namespace Restaurant_Site.server.Services
 {
     public class TableService : ITableService
     {

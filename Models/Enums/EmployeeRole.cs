@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Models.Enums
+﻿namespace Restaurant_Site.server.Models.Enums
 {
     public enum EmployeeRole
     {

@@ -1,17 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurant_Site.Models;
-using Restaurant_Site.Models.finances;
-using Restaurant_Site.server.Infrastructure;
 using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Models.finances;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Models.Enums;
 
 namespace Restaurant_Site.Infrastructure
 {
     public class RestaurantContext : DbContext, IRestaurantContext
     {
-        public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options) { }       
+        public RestaurantContext(DbContextOptions options) : base(options)
+        { }
+        //public RestaurantContext(DbContextOptions<RestaurantContext> options) : base(options) { }       
         public DbSet<Person> Persons { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Menu> Menus { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Order> Orders { get; set; } 
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -21,7 +23,8 @@ namespace Restaurant_Site.Infrastructure
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<DishDto> DishDto { get; set; }
-        public DbSet<ShopingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> Items { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<CashRegister> CashRegisters { get; set; }
@@ -34,106 +37,84 @@ namespace Restaurant_Site.Infrastructure
         {
             return Set<T>();
         }
-        public IEnumerable<Product> GetAllProducts()
-        {
-            return Menus
-                .Include(m => m.Products)
-                .SelectMany(m => m.Products)
-                .ToList();
-        }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Ignore<BaseEntity>();
 
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.HasKey(p => p.Id);
                 entity.HasIndex(p => p.Username).IsUnique();
             });
-            modelBuilder.Entity<Product>(async entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasData(
-                    new Product()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "mantu",
-                        Description = "gushtin",
-                        Price = 20,
-                        Photo = "b.jpg",
-                        Status = ProductStatus.Available
-                    },
-                    new Product()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Палов",
-                        Description = "ЯК ба як",
-                        Price = 100,
-                        Photo = "a.jpg",
-                        Status = ProductStatus.Available
-                    }
-                );
-                entity.HasKey(p => p.Id);
-                entity.HasMany(p => p.Menus)
-                      .WithMany(m => m.Products)
-                      .UsingEntity(join => join.ToTable("ProductMenu"));
                 entity.Property(p => p.Price)
                       .HasColumnType("decimal(18, 2)");
+                entity.HasMany(p=>p.Sales)
+                       .WithOne(s=>s.Product)
+                       .HasForeignKey(s => s.ProductId)
+                       .IsRequired(false);
             });
-            modelBuilder.Entity<Menu>(entity =>
-            {
-                entity.HasKey(m => m.Id);
-                entity.HasMany(m => m.Products)
-                      .WithMany(p => p.Menus)
-                      .UsingEntity<Dictionary<string, object>>(
-                        "MenuProduct",
-                        join => join.HasOne<Product>().WithMany().HasForeignKey("ProductId"),
-                        join => join.HasOne<Menu>().WithMany().HasForeignKey("MenuId")
-                    );
-            });
+
+
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasOne(od => od.Product)
-                      .WithMany()
-                      .HasForeignKey(od => od.ProductId);
-                entity.HasOne(od => od.Customer)
-                      .WithMany()
-                      .HasForeignKey(od => od.CustomerId);
-                entity.HasOne(od => od.Table)
-                      .WithMany()
-                      .HasForeignKey(od => od.TableId);
-                entity.HasOne(od => od.Employee)
-                      .WithMany()
-                      .HasForeignKey(od => od.EmployeeId);
-                entity.HasOne(od => od.Order)
-                      .WithMany(o => o.OrderDetails)
-                      .HasForeignKey(od => od.OrderId);
-                entity.Property(od => od.ProductId)
-                      .IsRequired();
-                entity.Property(od => od.CustomerId)
-                      .IsRequired();
-                entity.Property(od => od.TableId)
-                      .IsRequired();
-                entity.Property(od => od.EmployeeId)
-                      .IsRequired();
-                entity.Property(od => od.OrderId)
-                       .IsRequired();
-                entity.Property(od => od.CretionalDate)
-                      .ValueGeneratedOnAdd()
-                      .IsRequired();
-                entity.Property(od => od.EditDate)
-                      .ValueGeneratedOnAddOrUpdate()
-                      .IsRequired();
+                entity.HasKey(e => e.Id);
 
+                entity.Property(e => e.ProductId).IsRequired();
+                entity.Property(e => e.Quantity).IsRequired();
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.EditDate).IsRequired(true);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany()
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany()
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Table)
+                    .WithMany()
+                    .HasForeignKey(d => d.TableId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany()
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(d => d.status)
+                    .HasConversion<string>()
+                    .IsRequired();
             });
+
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasKey(e=>e.Id);
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnType("decimal(18,2)");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(255);
+
                 entity.HasMany(o => o.OrderDetails)
-                      .WithOne(d => d.Order)
-                      .HasForeignKey(d => d.OrderId)
-                      .IsRequired()
-                      .OnDelete(DeleteBehavior.Cascade);
+                    .WithOne(d => d.Order)
+                    .HasForeignKey(d => d.OrderId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(o => o.Sale)
+                        .WithMany(s => s.Order)
+                        .HasForeignKey(o => o.SaleId)
+                        .IsRequired()
+                        .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -219,10 +200,18 @@ namespace Restaurant_Site.Infrastructure
                 entity.Property(d => d.Price).HasPrecision(18, 2);
             });
 
-            modelBuilder.Entity<ShopingCartItem>(entity =>
+            modelBuilder.Entity<Cart>(entity =>
             {
-                entity.HasKey(sh => sh.MenuId);
+                modelBuilder.Entity<Cart>().HasKey(c => c.Id);
+
             });
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(c => c.CartItemId);
+                entity.Property(c => c.Price)
+                      .HasColumnType("decimal(18, 2)");
+            });
+
             modelBuilder.Entity<Delivery>(entity =>
             {
                 entity.HasKey(d => d.Id);
@@ -246,6 +235,7 @@ namespace Restaurant_Site.Infrastructure
                 entity.Property(c => c.RegisterDateTime)
                       .IsRequired();
             });
+            var categoryId = Guid.NewGuid();
             modelBuilder.Entity<Expense>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -260,7 +250,16 @@ namespace Restaurant_Site.Infrastructure
                       .WithMany()
                       .HasForeignKey(e => e.CategoryId)
                       .IsRequired(false);
+                entity.HasData(new Expense()
+                {
+                    Id = Guid.NewGuid(),
+                    Description = "Lunch with client",
+                    Amount = 45.67m,
+                    ExpenseDateTime = DateTime.UtcNow,
+                    CategoryId = categoryId
+                });
             });
+           
             modelBuilder.Entity<ExpenseCategory>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -270,6 +269,11 @@ namespace Restaurant_Site.Infrastructure
                       .WithOne(e => e.Category)
                       .HasForeignKey(e => e.CategoryId)
                       .OnDelete(DeleteBehavior.Restrict);
+                entity.HasData(new ExpenseCategory()
+                {
+                    Id = categoryId,
+                    Name = "Meals"
+                });
             });
             modelBuilder.Entity<FinancialTransaction>(entity =>
             {
@@ -296,26 +300,38 @@ namespace Restaurant_Site.Infrastructure
                       .HasForeignKey(s => s.EmployeeId)
                       .IsRequired(false);
             });
+
             modelBuilder.Entity<Sale>(entity =>
             {
                 entity.HasKey(s => s.Id);
 
                 entity.Property(s => s.SaleDateTime)
-               .IsRequired();
+                    .IsRequired();
+
                 entity.Property(s => s.TotalAmount)
-                       .HasColumnType("decimal(18,2)") 
-                       .IsRequired();
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
                 entity.HasMany(s => s.ProductsSold)
-                       .WithMany()
-                       .UsingEntity(j => j.ToTable("SaleProducts")); 
+                    .WithMany()
+                    .UsingEntity<Dictionary<string, object>>(
+                        "SaleProducts",
+                        j => j.HasOne<Product>()
+                              .WithMany()
+                              .HasForeignKey("ProductId")
+                              .OnDelete(DeleteBehavior.Cascade),
+                        j => j.HasOne<Sale>()
+                              .WithMany()
+                              .HasForeignKey("SaleId")
+                              .OnDelete(DeleteBehavior.Cascade)
+                    );
+
                 entity.HasOne(s => s.Employee)
-                       .WithMany(e => e.Sales)
-                       .HasForeignKey(s => s.EmployeeId)
-                       .IsRequired(false); 
-                entity.HasOne(s => s.Order)
-                       .WithOne(o => o.Sale)
-                       .HasForeignKey<Sale>(s => s.Id)
-                       .IsRequired(false);
+                        .WithMany(e => e.Sales)
+                        .HasForeignKey(s => s.EmployeeId)
+                        .OnDelete(DeleteBehavior.Restrict);
+                
+
             });
         }
     }

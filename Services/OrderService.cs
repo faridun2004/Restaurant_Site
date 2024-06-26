@@ -1,64 +1,29 @@
-﻿using Restaurant_Site.Models;
-using Restaurant_Site.Repository;
-using Restaurant_Site.server.IServices;
+﻿using AutoMapper.Internal;
 using Restaurant_Site.server.Models;
+using Restaurant_Site.server.IServices;
 
 namespace Restaurant_Site.server.Services
 {
     public class OrderService : IOrderService
     {
-        ISQLRepository<Order> _repository;
+        private readonly List<Order> _orders = new();
 
-        public OrderService(ISQLRepository<Order> repository)
+        public Task<Guid> CreateOrder(Order order)
         {
-            _repository = repository;
+          /*  order.Id = _orders.Count +1;*/
+            _orders.Add(order);
+            return Task.FromResult(order.Id);
         }
 
-        public IQueryable<Order> GetAll()
+        public Task<Order> GetOrder(Guid orderId)
         {
-            return _repository.GetAll();
-        }
-        public IQueryable<Order> GetAll(int skip, int take)
-        {
-            return _repository.GetAll().Skip(skip).Take(take);
-        }
-        public async Task<Order> GetById(Guid id)
-        {
-            return await _repository.GetById(id);
+            var order = _orders.FirstOrDefault(o => o.Id == orderId);
+            return Task.FromResult(order);
         }
 
-        public Order TryCreate(Order item, out string message)
+        public Task<IEnumerable<Order>> GetOrders()
         {
-            if (string.IsNullOrEmpty(item.Id.ToString()))
-            {
-                message = "The name or description is be empty!";
-                return default;
-            }
-            else
-            {
-                return _repository.TryCreate(item, out message);
-            }
-        }
-
-        public bool TryUpdate(Guid id, Order item, out string message)
-        {
-            var _item = _repository.GetById(id).GetAwaiter().GetResult();
-            if (_item is null)
-            {
-                message = "Item not found";
-                return false;
-            }
-            else
-            {
-                _item.OrderDetails = item.OrderDetails;
-
-                return _repository.TryUpdate(_item, out message);
-            }
-
-        }
-        public bool TryDelete(Guid id, out string message)
-        {
-            return _repository.TryDelete(id, out message);
+            return Task.FromResult<IEnumerable<Order>>(_orders);
         }
     }
 }

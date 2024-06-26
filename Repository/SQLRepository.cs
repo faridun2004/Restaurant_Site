@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Restaurant_Site.Infrastructure;
-using Restaurant_Site.Models;
 using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Models;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.Infrastructure;
 
-namespace Restaurant_Site.Repository
+namespace Restaurant_Site.server.Repository
 {
     public class SQLRepository<T> : ISQLRepository<T> where T : BaseEntity
     {

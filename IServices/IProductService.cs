@@ -1,8 +1,15 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models;
 
-namespace Restaurant_Site.IServices
+namespace Restaurant_Site.server.IServices
 {
-    public interface IProductService : IBaseService<Product>
+    public interface IProductService 
     {
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<Product> GetByIdAsync(int id);
+        Task AddAsync(Product product);
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(int id);
+        Task<List<Product>> GetProductsByCategoryIdAsync(int categoryId);
+        
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Restaurant_Site.Models.finances
+﻿namespace Restaurant_Site.server.Models.finances
 {
     //Финансовая транзакция
     public class FinancialTransaction:BaseEntity

@@ -1,8 +1,9 @@
 ﻿using MediatR;
-using Restaurant_Site.CQRS.Queries;
 using Restaurant_Site.Infrastructure;
-using Restaurant_Site.Models;
-namespace Restaurant_Site.Handlers
+using Restaurant_Site.server.CQRS.Queries;
+using Restaurant_Site.server.Infrastructure;
+using Restaurant_Site.server.Models;
+namespace Restaurant_Site.server.Handlers
 {
     public class GetEmployeeQueryHandler : IRequestHandler<GetEmployeeByIdQuery, Employee>
     {

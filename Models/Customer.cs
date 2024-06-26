@@ -1,8 +1,7 @@
-﻿using Restaurant_Site.server.Models;
-using System.Globalization;
+﻿using Restaurant_Site.server.Models.Enums;
 using System.Text.Json.Serialization;
 
-namespace Restaurant_Site.Models
+namespace Restaurant_Site.server.Models
 {
     public class Customer: Person
     {

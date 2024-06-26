@@ -1,7 +1,7 @@
-﻿using Restaurant_Site.Models;
+﻿using Restaurant_Site.server.Models.Enums;
 
 
-namespace Restaurant_Site.Contracts
+namespace Restaurant_Site.server.Contracts
 {
     public record RequestOrderDishDto
     {

@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualBasic;
+﻿using Restaurant_Site.server.Models.Enums;
 
-namespace Restaurant_Site.Models
+namespace Restaurant_Site.server.Models
 {
     public class DishDto: BaseEntity
     {

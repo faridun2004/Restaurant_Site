@@ -1,7 +1,7 @@
 ﻿using Restaurant_Site.server.Models;
 using System.Text.Json.Serialization;
 
-namespace Restaurant_Site.Models
+namespace Restaurant_Site.server.Models
 {
     public class Table: BaseEntity
     {
